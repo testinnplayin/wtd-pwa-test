@@ -27,4 +27,18 @@ router.get('/', (req, res) => {
         .catch(err => get500(req, res, err, `cannot fetch thingamabobs`));
 });
 
+router.get('/:id', (req, res) => {
+    Thingamabob
+        .findById(req.params.id)
+        .exec()
+        .then(thinggy => {
+            if (!thinggy) {
+                return get404(res, `thingamabob ${req.param.id}`);
+            }
+
+            return get200(res, thinggy, 'thingamabob');
+        })
+        .catch(err => get500(req, res, err, `cannot fetch thinggy`));
+});
+
 module.exports = router;
