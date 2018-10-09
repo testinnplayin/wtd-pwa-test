@@ -17,7 +17,7 @@ const {
     get500
 } = require('../src/handlers/error-handlers');
 const {
-    get201,
+    get204,
     getSuccess
 } = require('../src/handlers/success-handlers');
 
