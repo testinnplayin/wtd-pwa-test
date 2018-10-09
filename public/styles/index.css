@@ -1,0 +1,26 @@
+main {
+    /* background-color: #f00; */
+    text-align: center;
+    height: 100%;
+    width: 100%;
+}
+
+.widget:hover {
+    background-color: darkblue;
+    cursor: pointer;
+}
+
+.widget {
+    height: 150px;
+    width: 150px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    background-color: #444;
+    color: #fff;
+    margin: 25px auto;
+}
+
+.widget p {
+    margin-top: 25px;
+    font-weight: bold;
+}
