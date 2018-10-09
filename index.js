@@ -3,6 +3,7 @@
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
+const path = require('path');
 
 const cors = require('cors');
 const arrOrigins = [
@@ -42,9 +43,15 @@ const whatchamagiggerRouter = require('./routes/whatchamagigger-router');
 
 app.use(morgan('common'));
 
+app.use(express.static(path.join(__dirname, '/public')));
+
 app.use('/api/dohickies', dohickyRouter);
 app.use('/api/thingamabobs', thingamabobRouter);
 app.use('/api/whatchamagiggers', whatchamagiggerRouter);
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+})
 
 app.use('*', (req, res) => {
     return res.status(404).json({ message : 'Path not found' });
