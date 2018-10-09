@@ -30,14 +30,19 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 const mongoose = require('mongoose');
-
 mongoose.Promise = global.Promise;
 
 const morgan = require('morgan');
 
 const {dbURL, port} = require('./config');
 
+const dohickyRouter = require('./routes/dohicky-router');
+const thingamabobRouter = require('./routes/thingamabob-router');
+
 app.use(morgan('common'));
+
+app.use('/api/dohickies', dohickyRouter);
+app.use('/api/thingamabobs', thingamabobRouter);
 
 app.use('*', (req, res) => {
     return res.status(404).json({ message : 'Path not found' });
