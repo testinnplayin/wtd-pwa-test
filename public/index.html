@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/styles/index.css" />
 </head>
 <body>
+    <!-- Navbar -->
     <nav>
         <li><a href="">Home</a></li>
         <li><a href="">Thingamabobs</a></li>
@@ -15,15 +16,35 @@
         <!-- <li><a href="">Whatchamagiggers</a></li> -->
     </nav>
 
+    <!-- Widget area -->
     <main>
         <h1>Dashboard</h1>
-        <section class="widget t-widget">
+        <section class="widget t-widget" id="thingamabobs">
             <h3>Thingamabobs</h3>
         </section>
-        <section class="widget d-widget">
+        <section class="widget d-widget" id="dohickies">
             <h3>Dohickies</h3>
         </section>
     </main>
+
+    <!-- Modal -->
+    <div class="modal-container" id="table-modal">
+        <div class="modal">
+            <div class="m-header">
+                <button class="modal-close-btn" type="button">X</button>
+            </div>
+            <div class="m-body">
+                <table class="m-body-table">
+                    <thead class="m-body-t-head">
+                        <tr class="m-body-th-tr"></tr>
+                    </thead>
+                    <tbody class="m-body-t-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script src="/scripts/index.js" type="module"></script>
 </body>
 </html>
