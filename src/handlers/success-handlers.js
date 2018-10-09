@@ -1,7 +1,12 @@
 'use strict';
 
 module.exports = {
-    getSuccess : function (res, data, str) {
-        return res.status(200).json({ [`${str}`] : data });
+    get204 : function (res) {
+        console.info(`Request successful for deletion`);
+        return res.status(204).end();
+    },
+    getSuccess : function (res, data, str, status) {
+        console.info(`Request successful for ${str}`);
+        return res.status(status).json({ [`${str}`] : data });
     }
 };
