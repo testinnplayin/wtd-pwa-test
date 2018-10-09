@@ -10,7 +10,7 @@ const dohickySchema = mongoose.Schema({
     thingamabob_id : {
         type : mongoose.Schema.Types.ObjectId,
         ref : 'Thingamabob',
-        default : null
+        required : true
     },
     thingamabob_bp : mongoose.Schema.Types.Mixed
 },
