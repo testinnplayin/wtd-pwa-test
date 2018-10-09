@@ -24,7 +24,7 @@ router.get('/', (req, res) => {
 
             return get200(res, thinggies, 'thingamabobs');
         })
-        .catch(err => get500(req, res, err, `cannot fetch thingamabobs`));
+        .catch(err => get500(res, err, `cannot fetch thingamabobs`));
 });
 
 router.get('/:id', (req, res) => {
@@ -38,7 +38,7 @@ router.get('/:id', (req, res) => {
 
             return get200(res, thinggy, 'thingamabob');
         })
-        .catch(err => get500(req, res, err, `cannot fetch thinggy`));
+        .catch(err => get500(res, err, `cannot fetch thinggy`));
 });
 
 module.exports = router;
