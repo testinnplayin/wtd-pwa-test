@@ -8,8 +8,11 @@ const {Thingamabob} = require('../src/models/thingamabob');
 
 const {
     get400,
+    get404,
     get500
 } = require('../src/handlers/error-handlers');
+
+const {getSuccess} = require('../src/handlers/success-handlers');
 
 function successCase(res, count, type) {
     return res.status(200).json({ count : count, type : type });
@@ -47,6 +50,35 @@ router.get('/dohickies/count', (req, res) => {
             return successCase(res, count, str);
         })
         .catch(err => get500(res, err, `cannot fetch ${str} count`));
+});
+
+router.get('/thingamabobs/table', (req, res) => {
+    const str = 'thingamabobs';
+
+    Thingamabob
+        .find()
+        .exec()
+        .then(thinggies => {
+            const str2 = 'dohickies';
+            if (!thinggies) {
+                return get404(res, `${str} for table data`);
+            }
+
+            const thingIds = thinggies.map(thinggy => thinggy._id);
+
+            Dohicky
+                .find({ thingamabob_id : { $in : thingIds } })
+                .populate('thingamabob_id ')
+                .then(dohs => {
+                    if (!dohs) {
+                        return get404(res, `${str2} linked to ${str} for table data`);
+                    }
+
+                    return getSuccess(res, dohs, `dohickies`, 200);
+                })
+                .catch(err => get500(res, err, `cannot fetch table data for linked ${str2}`));
+        })
+        .catch(err => get500(res, err, `cannot fetch ${str} for table data`));
 });
 
 module.exports = router;

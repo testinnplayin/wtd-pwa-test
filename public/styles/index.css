@@ -24,3 +24,7 @@ main {
     margin-top: 25px;
     font-weight: bold;
 }
+
+.hidden {
+    display: none;
+}
