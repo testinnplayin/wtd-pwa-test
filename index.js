@@ -38,11 +38,13 @@ const {dbURL, port} = require('./config');
 
 const dohickyRouter = require('./routes/dohicky-router');
 const thingamabobRouter = require('./routes/thingamabob-router');
+const whatchamagiggerRouter = require('./routes/whatchamagigger-router');
 
 app.use(morgan('common'));
 
 app.use('/api/dohickies', dohickyRouter);
 app.use('/api/thingamabobs', thingamabobRouter);
+app.use('/api/whatchamagiggers', whatchamagiggerRouter);
 
 app.use('*', (req, res) => {
     return res.status(404).json({ message : 'Path not found' });
