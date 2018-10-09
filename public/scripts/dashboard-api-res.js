@@ -10,3 +10,5 @@ export const resources = {
     },
     c : 'count'
 };
+
+export const gReqOpts = { method : 'GET', mode : 'cors' };
