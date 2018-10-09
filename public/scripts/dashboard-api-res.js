@@ -8,7 +8,8 @@ export const resources = {
         tEle : 'thingamabobs',
         wEle : 'whatchamagiggers'
     },
-    c : 'count'
+    c : 'count',
+    t : 'table'
 };
 
 export const gReqOpts = { method : 'GET', mode : 'cors' };
