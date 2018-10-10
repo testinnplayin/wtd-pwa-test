@@ -18,6 +18,8 @@ function successCase(res, count, type) {
     return res.status(200).json({ count : count, type : type });
 }
 
+// Count requests
+
 router.get('/thingamabobs/count', (req, res) => {
     const str = 'thingamabobs';
 
@@ -52,6 +54,8 @@ router.get('/dohickies/count', (req, res) => {
         .catch(err => get500(res, err, `cannot fetch ${str} count`));
 });
 
+// Table requests
+
 router.get('/thingamabobs/table', (req, res) => {
     const str = 'thingamabobs';
 
@@ -77,6 +81,23 @@ router.get('/thingamabobs/table', (req, res) => {
                     return getSuccess(res, dohs, `dohickies`, 200);
                 })
                 .catch(err => get500(res, err, `cannot fetch table data for linked ${str2}`));
+        })
+        .catch(err => get500(res, err, `cannot fetch ${str} for table data`));
+});
+
+router.get('/dohickies/table', (req, res) => {
+    const str = 'dohickies';
+
+    Dohicky
+        .find()
+        .populate('thingamabob_id')
+        .exec()
+        .then(dohs => {
+            if (!dohs) {
+                return get400(res, `${str} for table data`);
+            }
+
+            return getSuccess(res, dohs, str, 200);
         })
         .catch(err => get500(res, err, `cannot fetch ${str} for table data`));
 });
