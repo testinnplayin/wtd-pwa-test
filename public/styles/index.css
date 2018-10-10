@@ -28,3 +28,7 @@ main {
 .hidden {
     display: none;
 }
+
+.warning {
+    color: #f00;
+}
