@@ -76,10 +76,45 @@ function fetchTCount() {
         });
 }
 
+function checkCacheForTData(tableId, url) {
+    if ('caches' in window) {
+        caches.match(url)
+            .then(res => {
+                if (res) {
+                    res.json()
+                        .then(data => {
+                            console.log('retrieval from cache successful');
+                            state.rawTData = data.dohickies;
+                            state.tDataMsg = `Successful retrieval from cache for table data for ${tableId}`;
+                            let modal = document.getElementById('table-modal');
+                            modal.classList.remove('hidden');
+                            renderTable(tableId, data.dohickies);
+                            hasCache = true;
+                            return hasCache;
+                        })
+                } else {
+                    throw new Error(`${url} not in cache`);
+                }
+            })
+            .catch(err => {
+                console.error(`Error retrieving table data for ${tableId} from cache: ${err}`);
+                state.rawTData = 'Error';
+                state.tDataMsg = 'Error retrieving table data from cache';
+            });
+        return true;
+    }
+}
+
 function fetchTableData(tableId) {
     const endpnt = `${resources.bAddress}/${resources.api}/${tableId}/${resources.t}`,
         getReq = new Request(endpnt, gReqOpts);
+
     
+    let hasCache = false;
+
+    hasCache = checkCacheForTData(tableId, endpnt);
+    console.log('hasCache ', hasCache);
+
     fetch(getReq)
         .then(response => {
             if (!response.ok) throw new Error(response.statusText);
@@ -90,10 +125,16 @@ function fetchTableData(tableId) {
         .then(data => {
             state.rawTData = data.dohickies;
             state.tDataMsg = `Successful retrieval of table data for ${tableId}`;
-            console.log('state inside fetchTableData ', state);
+            console.log('state inside fetchTableData ', state, 'hasCache ', hasCache);
             let modal = document.getElementById('table-modal');
             modal.classList.remove('hidden');
-            renderTable(tableId, data.dohickies);
+
+            if (hasCache) {
+                console.log('has cache');
+                // TODO: write update table code here
+            } else {
+                renderTable(tableId, data.dohickies);
+            }
         })
         .catch(err => {
             console.error(`Error retrieving table data for ${tableId}: ${err}`);
@@ -229,13 +270,72 @@ function renderTable(tableId, data) {
 
 
 // equivalent to created function in Vue.js... sets up the initial state
-function setUpState () {
+function setUpStateNoSW () {
+    console.log('setUpStateNoSW');
     fetchTCount();
     fetchDCount();
+    setUpBtsNMod();
+}
+
+function setUpCountNBtns(url) {
+    console.log('setUpCountNBtns ', url);
+    if (url.includes('dohickies')) {
+        fetchDCount();
+    } else {
+        fetchTCount();
+    }
+}
+
+function setUpBtsNMod() {
     setUpWButton(tClick);
     setUpWButton(dClick);
     setUpModal();
     setUpMButton();
 }
 
-setUpState();
+// Service worker code, to refactor
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+        .register('./sw.js')
+        .then(function() {
+            console.log('[Service Worker] registered');
+            if ('caches' in window) {
+                const countURLs = [
+                    `${resources.bAddress}/${resources.api}/${resources.elements.dEle}/${resources.c}`,
+                    `${resources.bAddress}/${resources.api}/${resources.elements.tEle}/${resources.c}`
+                ];
+
+                countURLs.forEach(cUrl => {
+                    console.log('cUrl ', cUrl);
+                    caches.match(cUrl)
+                        .then(res => {
+                            if (res) {
+                                res.json()
+                                    .then(data => {
+                                        console.log('data ', data);
+                                        if (data.type === 'dohickies') {
+                                            state.dCount = data.count;
+                                            state.dCMsg = `Successful retrieval of dohicky count from cache`;
+                                        } else {
+                                            state.tCount = data.count;
+                                            state.tCMsg = `Successful retrieval of thingamabob count from cache`;
+                                        }
+                                        setUpCountNBtns(cUrl);
+                                    });
+                            } else {
+                                throw new Error(`No count data in cache`);
+                            }
+                        })
+                        .catch(err => {
+                            console.error('cache match error ', err)
+                            setUpCountNBtns(cUrl);
+                        });
+                })
+                setUpBtsNMod();
+            }
+        })
+        .catch(err => console.error(`[Service Worker] registration error: ${err}`));
+} else {
+    setUpStateNoSW();
+}
