@@ -1,3 +1,8 @@
+body {
+    height: 100%;
+    width: 100%;
+}
+
 main {
     /* background-color: #f00; */
     text-align: center;
@@ -23,6 +28,60 @@ main {
 .widget p {
     margin-top: 25px;
     font-weight: bold;
+}
+
+.modal-container {
+    background: rgba(0, 0, 0, 0.4);
+    height: 100%;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.modal {
+    background-color: #fff;
+    border: 1px solid #000;
+    margin: 15% auto;
+    min-height: 400px;
+    width: 70%;
+}
+
+.m-header,
+.m-body {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.m-header {
+    border-bottom: 1px solid #ccc;
+    height: 40px;
+}
+
+.m-body {
+    margin-top: 30px;
+    min-height: 375px;
+    width: 90%;
+}
+
+.btn {
+    background-color: #fff;
+    border: 0;
+    color: #444;
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+    padding: 12px;
+}
+
+.m-body-table {
+    width: 100%;
+}
+
+.m-body-table tr th,
+.m-body-table tr td {
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
 }
 
 .hidden {
