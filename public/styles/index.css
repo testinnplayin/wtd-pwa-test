@@ -1,6 +1,15 @@
+html {
+    min-height: 640px;
+}
+
+html,
+body {
+    box-sizing: border-box;
+    width: 100%;
+}
+
 body {
     height: 100%;
-    width: 100%;
 }
 
 main {
@@ -32,8 +41,8 @@ main {
 
 .modal-container {
     background: rgba(0, 0, 0, 0.4);
-    height: 100%;
     position: absolute;
+    min-height: 1000px;
     top: 0;
     width: 100%;
     z-index: 1;
@@ -44,24 +53,24 @@ main {
     border: 1px solid #000;
     margin: 15% auto;
     min-height: 400px;
-    width: 70%;
+    width: 98%;
 }
 
 .m-header,
 .m-body {
     margin: 0 auto;
-    width: 100%;
 }
 
 .m-header {
     border-bottom: 1px solid #ccc;
     height: 40px;
+    width: 100%;
 }
 
 .m-body {
     margin-top: 30px;
     min-height: 375px;
-    width: 90%;
+    width: 98%;
 }
 
 .btn {
@@ -81,7 +90,8 @@ main {
 .m-body-table tr th,
 .m-body-table tr td {
     border-bottom: 1px solid #ccc;
-    padding: 10px;
+    font-size: 15px;
+    padding: 7% 0;
 }
 
 .hidden {
@@ -90,4 +100,27 @@ main {
 
 .warning {
     color: #f00;
+}
+
+@media all and (min-width: 1280px) {
+
+    .modal-container {
+        height: 100%;
+
+    }
+
+    .modal {
+        width: 70%;
+    }
+
+    .m-body {
+        width: 90%;
+    }
+    
+    .m-body-table tr th,
+    .m-body-table tr td {
+        border-bottom: 1px solid #ccc;
+        font-size: 16px;
+        padding: 10px 0;
+    }
 }
