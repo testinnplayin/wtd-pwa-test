@@ -149,7 +149,7 @@ function renderWidget(hook, data) {
 
 function renderTHead(arr) {
     arr.forEach(item => {
-        let ele = document.createElement('td');
+        let ele = document.createElement('th');
         document.querySelector('.m-body-th-tr').appendChild(ele);
         ele.textContent = item;
     });
