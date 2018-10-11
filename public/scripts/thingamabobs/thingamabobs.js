@@ -5,7 +5,15 @@ import renderers from '../../scripts/helpers/renderers.js';
 
 const endpnt = `${resources.bAddress}/api/${resources.elements.tEle}`;
 
+
+
+// state object
+
 let state = {};
+
+
+
+// API calls
 
 function fetchThingamabobs() {
     const getReq = new Request(endpnt, gReqOpts);
@@ -31,17 +39,30 @@ function fetchThingamabobs() {
         });
 }
 
+
+
+// LISTENERS
+
+function createClickListener(eleId) {
+    let btn = document.getElementById(eleId);
+    btn.addEventListener('click', e => {
+        console.log('CLICK ', e.currentTarget);
+    });
+}
+
+
+// RENDER functions
+
 function renderList() {
     const rawData = state.thingamabobs;
 
     rawData.forEach((thingamabob, i) => {
        let li = renderers.renderListEle(thingamabob, i, '.t-list');
-       console.log('li ', li);
+       createClickListener(thingamabob._id);
     });
 }
 
 function setUpList() {
-    console.log('setUpList triggered');
     fetchThingamabobs();
 }
 
