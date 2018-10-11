@@ -1,13 +1,13 @@
 import {
     gReqOpts,
     resources
-} from './dashboard-api-res.js';
+} from '../api-res.js';
 import {
     dohickyTableFields,
     dohickyTableTitles,
     thingamabobTableTitles,
     thingamabobTableFields
-} from './table-data.js';
+} from './dashboard/table-data.js';
 import renderers from './helpers/renderers.js';
 
 'use strict';
