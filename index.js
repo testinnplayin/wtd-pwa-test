@@ -54,8 +54,14 @@ app.use('/api/whatchamagiggers', whatchamagiggerRouter);
 // HOME at index
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
-})
+});
 
+// dohickies view
+app.get('/thingamabobs', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/views/dohickies.html'));
+});
+
+// thingamabobs view
 app.get('/thingamabobs', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/views/thingamabobs.html'));
 });
