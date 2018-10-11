@@ -175,12 +175,6 @@ function setUpMButton () { // modal close button, clears table
 
         // remove head and body children elements so clears table
         clearTable(pHead, pBody);
-        // while (pHead.firstChild) {
-        //     pHead.removeChild(pHead.firstChild);
-        // }
-        // while (pBody.firstChild) {
-        //     pBody.removeChild(pBody.firstChild);
-        // }
     });
 }
 

@@ -51,9 +51,14 @@ app.use('/api/dohickies', dohickyRouter);
 app.use('/api/thingamabobs', thingamabobRouter);
 app.use('/api/whatchamagiggers', whatchamagiggerRouter);
 
+// HOME at index
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 })
+
+app.get('/thingamabobs', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/views/thingamabobs.html'));
+});
 
 app.use('*', (req, res) => {
     return res.status(404).json({ message : 'Path not found' });

@@ -7,6 +7,10 @@ const dohickySchema = mongoose.Schema({
         type : Boolean,
         default : true
     },
+    is_active : {
+        type : Boolean,
+        default : false
+    },
     thingamabob_id : {
         type : mongoose.Schema.Types.ObjectId,
         ref : 'Thingamabob',
