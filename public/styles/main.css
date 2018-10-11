@@ -21,3 +21,47 @@ main {
 .hidden {
     display: none;
 }
+
+.modal-container {
+    background: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    min-height: 1000px;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.modal {
+    background-color: #fff;
+    border: 1px solid #000;
+    margin: 15% auto;
+    min-height: 400px;
+    width: 98%;
+}
+
+.m-header,
+.m-body {
+    margin: 0 auto;
+}
+
+.m-header {
+    border-bottom: 1px solid #ccc;
+    height: 40px;
+    width: 100%;
+}
+
+.m-body {
+    margin-top: 30px;
+    min-height: 375px;
+    width: 98%;
+}
+
+.btn {
+    background-color: #fff;
+    border: 0;
+    color: #444;
+    cursor: pointer;
+    float: right;
+    font-weight: bold;
+    padding: 12px;
+}

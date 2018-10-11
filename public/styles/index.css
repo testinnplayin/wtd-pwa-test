@@ -18,7 +18,7 @@
     font-weight: bold;
 }
 
-.modal-container {
+/* .modal-container {
     background: rgba(0, 0, 0, 0.4);
     position: absolute;
     min-height: 1000px;
@@ -50,9 +50,9 @@
     margin-top: 30px;
     min-height: 375px;
     width: 98%;
-}
+} */
 
-.btn {
+/* .btn {
     background-color: #fff;
     border: 0;
     color: #444;
@@ -60,7 +60,7 @@
     float: right;
     font-weight: bold;
     padding: 12px;
-}
+} */
 
 .m-body-table {
     width: 100%;
