@@ -31,7 +31,7 @@ let state = {};
 
 // API FUNCTIONS
 
-function fetchDCount() {
+function fetchDCount(hasCache) {
     const getReq = new Request(dCountUrl, gReqOpts);
     
     fetch(getReq)
@@ -47,7 +47,7 @@ function fetchDCount() {
             state.dCMsg = `Successful retrieval of dohicky count`;
 
             console.log('state ', state);
-            renderWidget('.d-widget', data.count);
+            (hasCache) ? updateWidget('.d-widget', data.count) : renderWidget('.d-widget', data.count);
         })
         .catch(err => {
             console.error(`Error retrieving dohicky count: ${err}`);
@@ -56,7 +56,7 @@ function fetchDCount() {
         });
 }
 
-function fetchTCount() {
+function fetchTCount(hasCache) {
     const getReq = new Request(tCountUrl, gReqOpts);
 
     fetch(getReq)
@@ -72,7 +72,7 @@ function fetchTCount() {
             state.tCMsg = `Successful retrieval of thingamabob count`;
 
             console.log('state ', state);
-            renderWidget('.t-widget', data.count);
+            (hasCache) ? updateWidget('.t-widget', data.count) : renderWidget('.t-widget', data.count);
         })
         .catch(err => {
             console.error(`Error retrieving thingamabob count: ${err}`);
@@ -82,9 +82,11 @@ function fetchTCount() {
 }
 
 function checkCacheForTData(tableId, url) {
+    let hasCache = false;
     if ('caches' in window) {
         caches.match(url)
             .then(res => {
+                console.log('res ', res);
                 if (res) {
                     res.json()
                         .then(data => {
@@ -107,8 +109,10 @@ function checkCacheForTData(tableId, url) {
                 state.rawTData = 'Error';
                 state.tDataMsg = 'Error retrieving table data from cache';
             });
-        return true;
+        hasCache = false;
+        return hasCache;
     }
+    return hasCache;
 }
 
 function fetchTableData(tableId) {
@@ -117,6 +121,7 @@ function fetchTableData(tableId) {
     
     let hasCache = false;
     hasCache = checkCacheForTData(tableId, endpnt);
+    console.log('hasCache ', hasCache);
 
     fetch(getReq)
         .then(response => {
@@ -132,8 +137,14 @@ function fetchTableData(tableId) {
             modal.classList.remove('hidden');
 
             if (hasCache) {
+                console.log('has cache');
                 updateTable(tableId);
             } else {
+                let pHead = document.querySelector('.m-body-th-tr'),
+                    pBody = document.querySelector('.m-body-t-body');
+
+                // remove head and body children elements so clears table
+                clearTable(pHead, pBody);
                 renderTable(tableId, data.dohickies);
             }
         })
@@ -163,12 +174,13 @@ function setUpMButton () { // modal close button, clears table
             pBody = document.querySelector('.m-body-t-body');
 
         // remove head and body children elements so clears table
-        while (pHead.firstChild) {
-            pHead.removeChild(pHead.firstChild);
-        }
-        while (pBody.firstChild) {
-            pBody.removeChild(pBody.firstChild);
-        }
+        clearTable(pHead, pBody);
+        // while (pHead.firstChild) {
+        //     pHead.removeChild(pHead.firstChild);
+        // }
+        // while (pBody.firstChild) {
+        //     pBody.removeChild(pBody.firstChild);
+        // }
     });
 }
 
@@ -190,6 +202,16 @@ function renderWidget(hook, data) {
 }
 
 // Modal-related renders
+
+function clearTable(pBody, pHead) {
+    // remove head and body children elements so clears table
+    while (pHead.firstChild) {
+        pHead.removeChild(pHead.firstChild);
+    }
+    while (pBody.firstChild) {
+        pBody.removeChild(pBody.firstChild);
+    }
+}
 
 function renderTHead(arr) {
     arr.forEach(item => {
@@ -273,6 +295,7 @@ function updateTable(tableId) {
 
                 if (field === 'field') {
                     if (td.innerHTML !== currVal) td.textContent = currVal;
+                    console.log('td ', td);
                 }
             });
         });
@@ -299,6 +322,12 @@ function updateTable(tableId) {
     }
 }
 
+function updateWidget(klass, count) {
+    let ele = document.querySelector(klass).lastChild;
+    if (ele.innerHTML !== count) ele.textContent = count;
+}
+
+
 
 
 // Set up functions
@@ -310,11 +339,11 @@ function setUpStateNoSW () {
     setUpBtsNMod();
 }
 
-function setUpCountNBtns(url) {
+function setUpCountNBtns(url, hasCache) {
     if (url.includes('dohickies')) {
-        fetchDCount();
+        fetchDCount(hasCache);
     } else {
-        fetchTCount();
+        fetchTCount(hasCache);
     }
 }
 
@@ -328,6 +357,8 @@ function setUpBtsNMod() {
 // Service worker code, to refactor
 
 if ('serviceWorker' in navigator) {
+    let hasCache = false;
+
     navigator.serviceWorker
         .register('./sw.js')
         .then(function() {
@@ -341,6 +372,7 @@ if ('serviceWorker' in navigator) {
                 countURLs.forEach(cUrl => {
                     caches.match(cUrl)
                         .then(res => {
+                            hasCache = true;
                             if (res) {
                                 res.json()
                                     .then(data => {
@@ -352,7 +384,7 @@ if ('serviceWorker' in navigator) {
                                             state.tCount = data.count;
                                             state.tCMsg = `Successful retrieval of thingamabob count from cache`;
                                         }
-                                        setUpCountNBtns(cUrl);
+                                        setUpCountNBtns(cUrl, hasCache);
                                     });
                             } else {
                                 throw new Error(`No count data in cache`);
