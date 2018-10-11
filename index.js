@@ -58,7 +58,7 @@ app.get('/', (req, res) => {
 
 // dohickies view
 app.get('/dohickies', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/views/dohickies.html'));
+    res.sendFile(path.join(__dirname, 'public/views/thingamabobs.html'));
 });
 
 // thingamabobs view

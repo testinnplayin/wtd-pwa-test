@@ -1,5 +1,6 @@
 import { gReqOpts, resources } from '../../api-res.js';
-import renderers from '../../scripts/helpers/renderers.js';
+import {viewTitles} from '../constants/lists.js';
+import renderers from '../helpers/renderers.js';
 
 'use strict';
 
@@ -152,6 +153,17 @@ function renderList(str) {
 
 // SET UP functions
 
+function setUpH1() {
+    let titleP = document.querySelector('.view-title');
+    if (browserLoc.includes('dohickies')) {
+        // NOTE: this is assuming that the dohickies title is first in the array
+        titleP.textContent = viewTitles[0];
+    } else if (browserLoc.includes('thingamabobs')) {
+        // NOTE: this is assuming that the thingamabobs title is second in the array
+        titleP.textContent = viewTitles[1];
+    }
+}
+
 function setUpInitFetch() {
     if (browserLoc.includes('thingamabobs')) {
         fetchThingamabobs('thingamabobs');
@@ -161,6 +173,7 @@ function setUpInitFetch() {
 }
 
 function setUpList() {
+    setUpH1();
     setUpInitFetch();
 
     setUpModal();
