@@ -52,7 +52,7 @@ router.get('/:id', (req, res) => {
                 return get404(res, `${str} ${req.param.id}`);
             }
 
-            return getSuccess(res, thinggy, str);
+            return getSuccess(res, thinggy, str, 200);
         })
         .catch(err => get500(res, err, `cannot fetch ${str}`));
 });
