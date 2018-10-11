@@ -1,3 +1,12 @@
+.modal {
+    min-height: 200px;
+    margin: 50% auto;
+}
+
+.m-body {
+    min-height: 150px;
+}
+
 .t-list {
     list-style: none;
     padding: 0;
