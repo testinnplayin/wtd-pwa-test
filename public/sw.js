@@ -10,6 +10,7 @@ const dashboardURLs = [
     '/',
     '/index.html',
     '/scripts/index.js',
+    '/scripts/thingamabobs/thingamabobs.js',
     '/styles/normalize.css',
     '/styles/index.css'
 ];
