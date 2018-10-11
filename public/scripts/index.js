@@ -91,6 +91,7 @@ function checkCacheForTData(tableId, url) {
                             console.log('retrieval from cache successful');
                             state.rawTData = data.dohickies;
                             state.tDataMsg = `Successful retrieval from cache for table data for ${tableId}`;
+                            console.log('state inside cache area ', state.rawTData);
                             let modal = document.getElementById('table-modal');
                             modal.classList.remove('hidden');
                             renderTable(tableId, data.dohickies);
@@ -113,12 +114,9 @@ function checkCacheForTData(tableId, url) {
 function fetchTableData(tableId) {
     const endpnt = `${resources.bAddress}/${resources.api}/${tableId}/${resources.t}`,
         getReq = new Request(endpnt, gReqOpts);
-
     
     let hasCache = false;
-
     hasCache = checkCacheForTData(tableId, endpnt);
-    console.log('hasCache ', hasCache);
 
     fetch(getReq)
         .then(response => {
@@ -130,13 +128,11 @@ function fetchTableData(tableId) {
         .then(data => {
             state.rawTData = data.dohickies;
             state.tDataMsg = `Successful retrieval of table data for ${tableId}`;
-            console.log('state inside fetchTableData ', state, 'hasCache ', hasCache);
             let modal = document.getElementById('table-modal');
             modal.classList.remove('hidden');
 
             if (hasCache) {
-                console.log('has cache');
-                // TODO: write update table code here
+                updateTable(tableId);
             } else {
                 renderTable(tableId, data.dohickies);
             }
@@ -150,11 +146,11 @@ function fetchTableData(tableId) {
 
 
 
+
 // LISTENERS
 
 function setUpWButton (ele) { // widget button set up, opens modal
     ele.addEventListener('click', (e) => {
-        console.log('CLICK ', e.currentTarget);
         const tableId = e.currentTarget.getAttribute('id');
         fetchTableData(tableId);
     });
@@ -163,11 +159,13 @@ function setUpWButton (ele) { // widget button set up, opens modal
 function setUpMButton () { // modal close button, clears table
     document.querySelector('.modal-close-btn').addEventListener('click', () => {
         document.getElementById('table-modal').classList.add('hidden');
-        let pHead = document.querySelector('.m-body-th-tr');
+        let pHead = document.querySelector('.m-body-th-tr'),
+            pBody = document.querySelector('.m-body-t-body');
+
+        // remove head and body children elements so clears table
         while (pHead.firstChild) {
             pHead.removeChild(pHead.firstChild);
         }
-        let pBody = document.querySelector('.m-body-t-body');
         while (pBody.firstChild) {
             pBody.removeChild(pBody.firstChild);
         }
@@ -207,7 +205,7 @@ function renderDohTable(data) {
         let trKlass = 't-body-tr',
             tr = renderers.renderEle(i, 'tr', 't-body-tr', '.m-body-t-body');
         dohickyTableFields.forEach((field, j) => {
-            let td = renderers.renderEle(j, 'td', 't-body-td', `.${trKlass}-${i}`);
+            let td = renderers.renderEle(i, 'td', `t-body-td-${j}`, `.${trKlass}-${i}`);
 
             if (field === 'field') {
                 if (!doh.thingamabob_id) {
@@ -216,12 +214,7 @@ function renderDohTable(data) {
                     td.textContent = doh.thingamabob_id.awesome_field;
                 }
             } else if (field === 'is_ok') {
-                if (!doh.is_ok) {
-                    td.textContent = 'Not valid';
-                    td.classList.add('warning');
-                } else {
-                    td.textContent = 'Valid';
-                }
+                renderIsOk(doh, td);
             } else {
                 if (!doh.thingamabob_id) {
                     td.textContent = `Linked to deleted thingamabob ${doh.thingamabob_bp._id}`;
@@ -233,13 +226,22 @@ function renderDohTable(data) {
     });
 }
 
+function renderIsOk(doh, td) {
+    if (!doh.is_ok) {
+        td.textContent = 'Not valid';
+        td.classList.add('warning');
+    } else {
+        td.textContent = 'Valid';
+    }
+}
+
 function renderThingTable(data) {
     renderTHead(thingamabobTableTitles);
     data.forEach((doh, i) => {
         let tr = renderers.renderEle(i, 'tr', 't-body-tr', '.m-body-t-body'),
             trKlass = 't-body-tr';
         thingamabobTableFields.forEach((field, j) => {
-            let td = renderers.renderEle(j, 'td', 't-body-td', `.${trKlass}-${i}`);
+            let td = renderers.renderEle(i, 'td', `t-body-td-${j}`, `.${trKlass}-${i}`);
 
             if (field.includes('Linked dohicky')) {
                 td.textContent = field + doh._id;
@@ -258,7 +260,48 @@ function renderTable(tableId, data) {
     }
 }
 
+// Update render functions
 
+function updateTable(tableId) {
+    const rawTData = state.rawTData;
+
+    if (tableId === 'thingamabobs') {
+        rawTData.forEach((doh, i) => {
+            thingamabobTableFields.forEach((field, j) => {
+                let td = document.querySelector(`.t-body-td-${j}-${i}`),
+                    currVal = doh.thingamabob_id.awesome_field;
+
+                if (field === 'field') {
+                    if (td.innerHTML !== currVal) td.textContent = currVal;
+                }
+            });
+        });
+    } else {
+        rawTData.forEach((doh, i) => {
+            dohickyTableFields.forEach((field, j) => {
+                let td = document.querySelector(`.t-body-td-${j}-${i}`),
+                    oldVal = doh.thingamabob_bp.awesome_field;
+
+                if (field === 'field') {
+                    if (!doh.thingamabob_id) {
+                        if (oldVal !== td.innerHTML) td.textContent = oldVal;
+                    } else {
+                        let newVal = doh.thingamabob_id.awesome_field;
+                        if (newVal !== td.innerHTML) td.textContent = newVal;
+                    }
+                } else if (field === 'is_ok') {
+                    if (td.innerHTML !== doh.is_ok) {
+                        renderIsOk(doh, td);
+                    }
+                }
+            });
+        });
+    }
+}
+
+
+
+// Set up functions
 
 // equivalent to created function in Vue.js... sets up the initial state
 function setUpStateNoSW () {
