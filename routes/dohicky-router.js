@@ -11,19 +11,20 @@ const {
 } = require('../src/handlers/error-handlers');
 
 const {
-    get200
+    getSuccess
 } = require('../src/handlers/success-handlers');
 
 router.get('/', (req, res) => {
     Dohicky
         .find()
+        .populate('thingamabob_id')
         .exec()
         .then(dhs => {
             if (!dhs) {
                 return get404(res, 'dohickies');
             }
 
-            return get200(res, dhs, 'dohickies');
+            return getSuccess(res, dhs, 'dohickies', 200);
         })
         .catch(err => get500(res, err, `cannot fetch dohickhies`));
 });
@@ -37,7 +38,7 @@ router.get('/:id', (req, res) => {
                 return get404(res, `dohicky of id ${req.params.id}`);
             }
 
-            return get200(res, dh, 'dohicky');
+            return getSuccess(res, dh, 'dohicky', 200);
         })
         .catch(err => get500(res, err, `cannot fetch dohicky of id ${req.params.id}`));
 });
