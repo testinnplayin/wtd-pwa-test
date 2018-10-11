@@ -12,7 +12,9 @@ const dashboardURLs = [
     '/scripts/index.js',
     '/scripts/thingamabobs/thingamabobs.js',
     '/styles/normalize.css',
-    '/styles/index.css'
+    '/styles/main.css',
+    '/styles/index.css',
+    '/styles/lists.css'
 ];
 
 let dashboardCacheName = 'dashboard-Cache',
