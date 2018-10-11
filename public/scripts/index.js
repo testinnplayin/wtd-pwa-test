@@ -8,9 +8,16 @@ import {
     thingamabobTableTitles,
     thingamabobTableFields
 } from './table-data.js';
+import renderers from './helpers/renderers.js';
 
 'use strict';
 
+// urls
+
+const dCountUrl = `${resources.bAddress}/${resources.api}/${resources.elements.dEle}/${resources.c}`,
+    tCountUrl = `${resources.bAddress}/${resources.api}/${resources.elements.tEle}/${resources.c}`;
+
+// element selectors
 const dClick = document.querySelector('.d-widget'),
     tClick = document.querySelector('.t-widget');
 
@@ -25,8 +32,7 @@ let state = {};
 // API FUNCTIONS
 
 function fetchDCount() {
-    const endpnt = `${resources.bAddress}/${resources.api}/${resources.elements.dEle}/${resources.c}`,
-        getReq = new Request(endpnt, gReqOpts);
+    const getReq = new Request(dCountUrl, gReqOpts);
     
     fetch(getReq)
         .then(response => {
@@ -51,8 +57,7 @@ function fetchDCount() {
 }
 
 function fetchTCount() {
-    const endpnt = `${resources.bAddress}/${resources.api}/${resources.elements.tEle}/${resources.c}`,
-        getReq = new Request(endpnt, gReqOpts);
+    const getReq = new Request(tCountUrl, gReqOpts);
 
     fetch(getReq)
         .then(response => {
@@ -196,28 +201,13 @@ function renderTHead(arr) {
     });
 }
 
-function renderTR(i) {
-    let tr = document.createElement('tr');
-    document.querySelector('.m-body-t-body').appendChild(tr);
-    tr.classList.add(`t-body-tr-${i}`);
-
-    return tr;
-}
-
-function renderTD(j, tr) {
-    let td = document.createElement('td');
-    tr.appendChild(td);
-    td.classList.add(`t-body-td-${j}`);
-
-    return td;
-}
-
 function renderDohTable(data) {
     renderTHead(dohickyTableTitles);
     data.forEach((doh, i) => {
-        let tr = renderTR(i);
+        let trKlass = 't-body-tr',
+            tr = renderers.renderEle(i, 'tr', 't-body-tr', '.m-body-t-body');
         dohickyTableFields.forEach((field, j) => {
-            let td = renderTD(j, tr);
+            let td = renderers.renderEle(j, 'td', 't-body-td', `.${trKlass}-${i}`);
 
             if (field === 'field') {
                 if (!doh.thingamabob_id) {
@@ -246,9 +236,10 @@ function renderDohTable(data) {
 function renderThingTable(data) {
     renderTHead(thingamabobTableTitles);
     data.forEach((doh, i) => {
-        let tr = renderTR(i);
+        let tr = renderers.renderEle(i, 'tr', 't-body-tr', '.m-body-t-body'),
+            trKlass = 't-body-tr';
         thingamabobTableFields.forEach((field, j) => {
-            let td = renderTD(j, tr);
+            let td = renderers.renderEle(j, 'td', 't-body-td', `.${trKlass}-${i}`);
 
             if (field.includes('Linked dohicky')) {
                 td.textContent = field + doh._id;
@@ -271,14 +262,12 @@ function renderTable(tableId, data) {
 
 // equivalent to created function in Vue.js... sets up the initial state
 function setUpStateNoSW () {
-    console.log('setUpStateNoSW');
     fetchTCount();
     fetchDCount();
     setUpBtsNMod();
 }
 
 function setUpCountNBtns(url) {
-    console.log('setUpCountNBtns ', url);
     if (url.includes('dohickies')) {
         fetchDCount();
     } else {
@@ -302,12 +291,11 @@ if ('serviceWorker' in navigator) {
             console.log('[Service Worker] registered');
             if ('caches' in window) {
                 const countURLs = [
-                    `${resources.bAddress}/${resources.api}/${resources.elements.dEle}/${resources.c}`,
-                    `${resources.bAddress}/${resources.api}/${resources.elements.tEle}/${resources.c}`
+                    dCountUrl,
+                    tCountUrl
                 ];
 
                 countURLs.forEach(cUrl => {
-                    console.log('cUrl ', cUrl);
                     caches.match(cUrl)
                         .then(res => {
                             if (res) {
@@ -328,7 +316,7 @@ if ('serviceWorker' in navigator) {
                             }
                         })
                         .catch(err => {
-                            console.error('cache match error ', err)
+                            console.warn('Warning: ', err)
                             setUpCountNBtns(cUrl);
                         });
                 })
