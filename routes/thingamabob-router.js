@@ -35,7 +35,7 @@ router.get('/', (req, res) => {
                 return get404(res, str);
             }
 
-            return getSuccess(res, thinggies, str);
+            return getSuccess(res, thinggies, str, 200);
         })
         .catch(err => get500(res, err, `cannot fetch ${str}`));
 });
