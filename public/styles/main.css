@@ -1,0 +1,19 @@
+html {
+    min-height: 640px;
+}
+
+html,
+body {
+    box-sizing: border-box;
+    width: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+main {
+    text-align: center;
+    height: 100%;
+    width: 100%;
+}

@@ -1,0 +1,23 @@
+.t-list {
+    list-style: none;
+    padding: 0;
+}
+
+.t-list li {
+    display: block;
+    margin: 15px auto;
+    width: 95%;
+}
+
+.list-btn:hover {
+    background-color: darkblue;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.list-btn {
+    border: 1px solid #444;
+    padding: 20px 0;
+    width: 100%;
+}
