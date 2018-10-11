@@ -58,12 +58,12 @@ app.get('/', (req, res) => {
 
 // dohickies view
 app.get('/dohickies', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/views/thingamabobs.html'));
+    res.sendFile(path.join(__dirname, 'public/views/list.html'));
 });
 
 // thingamabobs view
 app.get('/thingamabobs', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/views/thingamabobs.html'));
+    res.sendFile(path.join(__dirname, 'public/views/list.html'));
 });
 
 app.use('*', (req, res) => {

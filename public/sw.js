@@ -9,7 +9,7 @@ const dashboardURLs = [
     filesToCache = [
     '/',
     '/index.html',
-    '/views/thingamabobs.html',
+    '/views/list.html',
     '/scripts/index.js',
     '/scripts/lists/lists.js',
     '/styles/normalize.css',
