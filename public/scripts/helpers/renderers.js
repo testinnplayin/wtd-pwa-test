@@ -9,7 +9,7 @@ export default {
     renderListEle(item, i, pKlass) {
         let li = document.createElement('li');
         document.querySelector(pKlass).appendChild(li);
-        
+
         const newLiKlass = `li-${i}`;
         li.classList.add(newLiKlass);
 
@@ -17,6 +17,7 @@ export default {
         document.querySelector(`.${newLiKlass}`).appendChild(btn);
         btn.setAttribute('type', 'button');
         btn.setAttribute('id', item._id);
+        btn.classList.add('list-btn');
         btn.textContent = item.awesome_field;
 
         return li;
