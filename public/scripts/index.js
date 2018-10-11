@@ -207,6 +207,16 @@ function clearTable(pBody, pHead) {
     }
 }
 
+
+function renderIsOk(doh, td) {
+    if (!doh.is_ok) {
+        td.textContent = 'Not valid';
+        td.classList.add('warning');
+    } else {
+        td.textContent = 'Valid';
+    }
+}
+
 function renderTHead(arr) {
     arr.forEach(item => {
         let ele = document.createElement('th');
@@ -215,6 +225,7 @@ function renderTHead(arr) {
     });
 }
 
+// For rendering the dohicky table body
 function renderDohTable(data) {
     renderTHead(dohickyTableTitles);
     data.forEach((doh, i) => {
@@ -242,15 +253,7 @@ function renderDohTable(data) {
     });
 }
 
-function renderIsOk(doh, td) {
-    if (!doh.is_ok) {
-        td.textContent = 'Not valid';
-        td.classList.add('warning');
-    } else {
-        td.textContent = 'Valid';
-    }
-}
-
+// For rendering the thingamabob table body
 function renderThingTable(data) {
     renderTHead(thingamabobTableTitles);
     data.forEach((doh, i) => {
