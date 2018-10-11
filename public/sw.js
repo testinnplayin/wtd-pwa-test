@@ -1,7 +1,12 @@
 'use strict';
 
-var dashboardCacheName = 'dashboard-Cache';
-var filesToCache = [
+const dashboardURLs = [
+    'http://localhost:3000/api/dashboard/thingamabobs/count',
+    'http://localhost:3000/api/dashboard/dohickies/count',
+    'http://localhost:3000/api/dashboard/thingamabobs/table',
+    'http://localhost:3000/api/dashboard/dohickies/table'
+],
+    filesToCache = [
     '/',
     '/index.html',
     '/scripts/index.js',
@@ -9,7 +14,9 @@ var filesToCache = [
     '/styles/index.css'
 ];
 
-var version = 0;
+let dashboardCacheName = 'dashboard-Cache',
+    version = 0;
+
 
 self.addEventListener('install', function(e) {
     console.log('[Service Worker] in process of installing! ', version);
@@ -43,12 +50,7 @@ self.addEventListener('activate', function(e) {
 
 self.addEventListener('fetch', function(e) {
     console.log('[Service Worker] fetching ', e.request.url);
-    const dashboardURLs = [
-        'http://localhost:3000/api/dashboard/thingamabobs/count',
-        'http://localhost:3000/api/dashboard/dohickies/count',
-        'http://localhost:3000/api/dashboard/thingamabobs/table',
-        'http://localhost:3000/api/dashboard/dohickies/table'
-    ];
+    
 
     if (dashboardURLs.indexOf(e.request.url) > - 1) {
         console.log('[Service Worker] ' + e.request.url + ' exists in cache');
