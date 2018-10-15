@@ -88,8 +88,9 @@ function setUpModalBtn() {
     });
 }
 
-function setUpModal() {
+function setUpModals() {
     document.getElementById('t-modal').classList.add('hidden');
+    document.getElementById('f-modal').classList.add('hidden');
 }
 
 function createClickListener(eleId) {
@@ -164,6 +165,13 @@ function setUpH1() {
     }
 }
 
+function setUpH3() {
+    const tBtnSexn = document.querySelector('.t-button-sexn');
+    if (browserLoc.includes('thingamabobs')) {
+        tBtnSexn.classList.remove('hidden');
+    }
+}
+
 function setUpInitFetch() {
     if (browserLoc.includes('thingamabobs')) {
         fetchThingamabobs('thingamabobs');
@@ -174,9 +182,10 @@ function setUpInitFetch() {
 
 function setUpList() {
     setUpH1();
+    setUpH3();
     setUpInitFetch();
 
-    setUpModal();
+    setUpModals();
     setUpModalBtn();
 }
 
