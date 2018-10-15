@@ -49,10 +49,18 @@
     <!-- Form modal -->
     <div class="t-modal-container modal-container" id="f-modal">
         <div class="modal">
-            <button class="btn f-close-btn">X</button>
-        </div>
-        <div class="f-m-body m-body">
-            
+            <div class="t-m-header m-header">
+                <button class="btn f-close-btn">X</button>
+            </div>
+            <div class="f-m-body m-body">
+                <form id="t-form">
+                    <div class="form-group">
+                        <label for="awesome-field">Awesome Field:</label>
+                        <input autofocus id="awesome-field" name="awesome-field" placeholder="Enter something awesome!" type="text" />
+                    </div>
+                    <button class="form-btn" type="submit">Create New Thingamabob</button>
+                </form>
+            </div>
         </div>
     </div>
     <!-- Scripts -->

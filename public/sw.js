@@ -10,7 +10,7 @@ const dashboardURLs = [
     '/',
     '/index.html',
     '/views/list.html',
-    '/scripts/index.js',
+    '/index.js',
     '/scripts/lists/lists.js',
     '/styles/normalize.css',
     '/styles/main.css',
@@ -54,13 +54,14 @@ self.addEventListener('activate', function(e) {
 
 self.addEventListener('fetch', function(e) {
     console.log('[Service Worker] fetching ', e.request.url);
-    
+    console.log(dashboardURLs.indexOf(e.request.url));
 
     if (dashboardURLs.indexOf(e.request.url) > - 1) {
-        console.log('[Service Worker] ' + e.request.url + ' exists in cache');
+        console.log('[Service Worker] ' + e.request.url + 'dashboard request exists in cache');
         e.respondWith(
             caches.open(dashboardCacheName + '-v' + version.toString())
                 .then(function(cache) {
+                    console.log('cache ', cache);
                     return fetch(e.request)
                         .then(function(response) {
                             cache.put(e.request.url, response.clone());
@@ -69,14 +70,16 @@ self.addEventListener('fetch', function(e) {
                         });
                 })
         );
-    } else if (dashboardURLs.indexOf(e.request.url) < -1 && e.request.url.includes('api/')) {
-        console.log('[Service Worker] ' + e.request.url + ' does not exist in cache');
+    } else if (dashboardURLs.indexOf(e.request.url) < 0) {
+        // && e.request.url.includes('api/')
+        console.log('[Service Worker] ' + e.request.url + ' non dashboard request cache');
         e.respondWith(
             caches.match(e.request)
                 .then(function(response) {
+                    console.log('Exists in cache');
                     return response || fetch(e.request);
                 })
         );
     }
-
+    
 });

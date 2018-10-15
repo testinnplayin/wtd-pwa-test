@@ -90,7 +90,7 @@ function setUpModalBtn(btn, mId) {
 
 function setUpModals() {
     document.getElementById('t-modal').classList.add('hidden');
-    document.getElementById('f-modal').classList.add('hidden');
+    // document.getElementById('f-modal').classList.add('hidden');
 }
 
 function createClickListener(eleId) {
