@@ -29,7 +29,7 @@ router.get('/thingamabobs/count', (req, res) => {
         .exec()
         .then(count => {
             if (!count || count === 'null' || count === 'undefined') {
-                return get400(res, str);
+                return get404(res, str);
             }
 
             return successCase(res, count, str);
@@ -46,7 +46,7 @@ router.get('/dohickies/count', (req, res) => {
         .exec()
         .then(count => {
             if (!count || count === 'null' || count === 'undefined') {
-                return get400(res, str);
+                return get404(res, str);
             }
 
             return successCase(res, count, str);
@@ -94,7 +94,7 @@ router.get('/dohickies/table', (req, res) => {
         .exec()
         .then(dohs => {
             if (!dohs) {
-                return get400(res, `${str} for table data`);
+                return get404(res, `${str} for table data`);
             }
 
             return getSuccess(res, dohs, str, 200);
