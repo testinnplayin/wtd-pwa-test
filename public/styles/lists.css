@@ -30,3 +30,19 @@
     padding: 20px 0;
     width: 100%;
 }
+
+.t-add:hover {
+    background-color: green;
+    color: #fff;
+    cursor: pointer;
+}
+
+.t-add {
+    background-color: #fff;
+    border: 1px solid green;
+    border-radius: 100%;
+    color: green;
+    font-size: 18px;
+    font-weight: bold;
+
+}

@@ -20,13 +20,21 @@
 
     <!-- List area -->
     <main>
-        <h1 class="view-title"></h1>
-        <ul class="t-list">
-            
-        </ul>
+        <section class="list-area">
+            <h1 class="view-title"></h1>
+            <ul class="t-list">
+                
+            </ul>
+        </section>
+
+        <!-- Thingamabob only button -->
+        <section class="t-button-sexn hidden">
+            <h3 class="t-h3">Add New Thingamabob</h3>
+            <button class="t-add">+</button>
+        </section>
     </main>
 
-    <!-- Thingamabob modal -->
+    <!-- Information modal -->
     <div class="t-modal-container modal-container" id="t-modal">
         <div class="modal">
             <div class="t-m-header m-header">
@@ -38,6 +46,15 @@
         </div>
     </div>
 
+    <!-- Form modal -->
+    <div class="t-modal-container modal-container" id="f-modal">
+        <div class="modal">
+            <button class="btn m-close-btn">X</button>
+        </div>
+        <div class="t-m-body m-body">
+            
+        </div>
+    </div>
     <!-- Scripts -->
     <script src="../scripts/lists/lists.js" type="module"></script>
 </body>
