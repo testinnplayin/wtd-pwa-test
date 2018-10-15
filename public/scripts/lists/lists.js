@@ -80,10 +80,10 @@ function fetchThingamabobs(str) {
 
 // LISTENERS
 
-function setUpModalBtn() {
-    let btn = document.querySelector('.m-close-btn');
+function setUpModalBtn(btn, mId) {
     btn.addEventListener('click', () => {
-        document.getElementById('t-modal').classList.add('hidden');
+        document.getElementById(mId).classList.add('hidden');
+        
         clearModal();
     });
 }
@@ -172,6 +172,15 @@ function setUpH3() {
     }
 }
 
+function setUpAddBtn() {
+    const addBtn = document.querySelector('.t-add'),
+        fModal = document.getElementById('f-modal');
+
+    addBtn.addEventListener('click', () => {
+        fModal.classList.remove('hidden');
+    });
+}
+
 function setUpInitFetch() {
     if (browserLoc.includes('thingamabobs')) {
         fetchThingamabobs('thingamabobs');
@@ -182,11 +191,16 @@ function setUpInitFetch() {
 
 function setUpList() {
     setUpH1();
+    // Thingamabob-specific set up
     setUpH3();
+    setUpAddBtn();
+
     setUpInitFetch();
 
     setUpModals();
-    setUpModalBtn();
+    setUpModalBtn(document.querySelector('.t-close-btn'), 't-modal');
+    setUpModalBtn(document.querySelector('.f-close-btn'), 'f-modal');
+
 }
 
 setUpList();
