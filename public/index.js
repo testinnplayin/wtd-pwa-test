@@ -178,10 +178,10 @@ function setUpMButton () { // modal close button, clears table
     });
 }
 
-function setUpModal () {
-    let modal = document.getElementById('table-modal');
-    modal.classList.add('hidden');
-}
+// function setUpModal () {
+//     let modal = document.getElementById('table-modal');
+//     modal.classList.add('hidden');
+// }
 
 
 
@@ -347,7 +347,7 @@ function setUpCountNBtns(url, hasCache) {
 function setUpBtsNMod() {
     setUpWButton(tClick);
     setUpWButton(dClick);
-    setUpModal();
+    // setUpModal();
     setUpMButton();
 }
 
@@ -356,46 +356,100 @@ function setUpBtsNMod() {
 if ('serviceWorker' in navigator) {
     let hasCache = false;
 
-    navigator.serviceWorker
-        .register('./sw.js')
-        .then(function() {
-            console.log('[Service Worker] registered');
-            if ('caches' in window) {
-                const countURLs = [
-                    dCountUrl,
-                    tCountUrl
-                ];
+    navigator.serviceWorker.getRegistrations()
+        .then(registrations => {
+            console.log('registrations ', registrations);
+            console.log('there is something in registrations array ', (registrations.length > 0) ? 'true': 'false');
+            
+            if (registrations.length === 0) {
+                navigator.serviceWorker
+                    .register('./sw.js')
+                    .then(function(registration) {
+                        console.log('[Service Worker] registered ', registration);
+                        // This following code snippet runs when there is no service worker installed already
+                        // NOTE: deactivate the caches conditional and run the caches code outside and below if need to update the service worker
+                        if ('caches' in window) {
+                            const countURLs = [
+                                dCountUrl,
+                                tCountUrl
+                            ];
 
-                countURLs.forEach(cUrl => {
-                    caches.match(cUrl)
-                        .then(res => {
-                            hasCache = true;
-                            if (res) {
-                                res.json()
-                                    .then(data => {
-                                        console.log('data ', data);
-                                        if (data.type === 'dohickies') {
-                                            state.dCount = data.count;
-                                            state.dCMsg = `Successful retrieval of dohicky count from cache`;
+                            countURLs.forEach(cUrl => {
+                                caches.match(cUrl)
+                                    .then(res => {
+                                        hasCache = true;
+                                        if (res) {
+                                            res.json()
+                                                .then(data => {
+                                                    console.log('data ', data);
+                                                    if (data.type === 'dohickies') {
+                                                        state.dCount = data.count;
+                                                        state.dCMsg = `Successful retrieval of dohicky count from cache`;
+                                                    } else {
+                                                        state.tCount = data.count;
+                                                        state.tCMsg = `Successful retrieval of thingamabob count from cache`;
+                                                    }
+                                                    setUpCountNBtns(cUrl, hasCache);
+                                                });
                                         } else {
-                                            state.tCount = data.count;
-                                            state.tCMsg = `Successful retrieval of thingamabob count from cache`;
+                                            throw new Error(`No count data in cache`);
                                         }
-                                        setUpCountNBtns(cUrl, hasCache);
+                                    })
+                                    .catch(err => {
+                                        console.warn('Warning: ', err)
+                                        setUpCountNBtns(cUrl);
                                     });
-                            } else {
-                                throw new Error(`No count data in cache`);
-                            }
-                        })
-                        .catch(err => {
-                            console.warn('Warning: ', err)
-                            setUpCountNBtns(cUrl);
-                        });
-                })
-                setUpBtsNMod();
+                            })
+                            setUpBtsNMod();
+                        }
+                    })
+                    .catch(err => console.error(`[Service Worker] registration error: ${err}`));
             }
         })
-        .catch(err => console.error(`[Service Worker] registration error: ${err}`));
+        .catch(err => console.error('What registrations?'));
+
+    // NOTE: for development purposes, reactivate the following code when working on the service worker otherwise it won't install/update without having to close and clear the history of Chrome
+
+    // navigator.serviceWorker
+    //     .register('./sw.js')
+    //     .then(function(registration) {
+    //         console.log('[Service Worker] registered ', registration);
+    //         if ('caches' in window) {
+    //             const countURLs = [
+    //                 dCountUrl,
+    //                 tCountUrl
+    //             ];
+
+    //             countURLs.forEach(cUrl => {
+    //                 caches.match(cUrl)
+    //                     .then(res => {
+    //                         hasCache = true;
+    //                         if (res) {
+    //                             res.json()
+    //                                 .then(data => {
+    //                                     console.log('data ', data);
+    //                                     if (data.type === 'dohickies') {
+    //                                         state.dCount = data.count;
+    //                                         state.dCMsg = `Successful retrieval of dohicky count from cache`;
+    //                                     } else {
+    //                                         state.tCount = data.count;
+    //                                         state.tCMsg = `Successful retrieval of thingamabob count from cache`;
+    //                                     }
+    //                                     setUpCountNBtns(cUrl, hasCache);
+    //                                 });
+    //                         } else {
+    //                             throw new Error(`No count data in cache`);
+    //                         }
+    //                     })
+    //                     .catch(err => {
+    //                         console.warn('Warning: ', err)
+    //                         setUpCountNBtns(cUrl);
+    //                     });
+    //             })
+    //             setUpBtsNMod();
+    //         }
+    //     })
+    //     .catch(err => console.error(`[Service Worker] registration error: ${err}`));
 } else {
     setUpStateNoSW();
 }
