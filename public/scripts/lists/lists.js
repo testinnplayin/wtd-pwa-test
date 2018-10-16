@@ -88,10 +88,10 @@ function setUpModalBtn(btn, mId) {
     });
 }
 
-function setUpModals() {
-    document.getElementById('t-modal').classList.add('hidden');
-    // document.getElementById('f-modal').classList.add('hidden');
-}
+// function setUpModals() {
+//     document.getElementById('t-modal').classList.add('hidden');
+//     // document.getElementById('f-modal').classList.add('hidden');
+// }
 
 function createClickListener(eleId) {
     let btn = document.getElementById(eleId);
@@ -197,7 +197,7 @@ function setUpList() {
 
     setUpInitFetch();
 
-    setUpModals();
+    // setUpModals();
     setUpModalBtn(document.querySelector('.t-close-btn'), 't-modal');
     setUpModalBtn(document.querySelector('.f-close-btn'), 'f-modal');
 
