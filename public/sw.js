@@ -86,7 +86,7 @@ self.addEventListener('fetch', function(e) {
             e.respondWith(
                 caches.match(e.request.url)
                     .then(function(response) {
-                        console.log('Exists in cache ', response);
+                        // console.log('Exists in cache ', response);
                         return response || fetch(e.request)
                             .catch(function(err) {
                                 console.error(`[Service Worker] Error: ${err}`);
