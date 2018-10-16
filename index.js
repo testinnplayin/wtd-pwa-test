@@ -57,12 +57,12 @@ app.get('/', (req, res) => {
 });
 
 // dohickies view
-app.get('/dohickies', (req, res) => {
+app.get('/list/dohickies', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/views/list.html'));
 });
 
 // thingamabobs view
-app.get('/thingamabobs', (req, res) => {
+app.get('/list/thingamabobs', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/views/list.html'));
 });
 
