@@ -86,14 +86,11 @@ function checkCacheForTData(tableId, url) {
     if ('caches' in window) {
         caches.match(url)
             .then(res => {
-                console.log('res ', res);
                 if (res) {
                     res.json()
                         .then(data => {
-                            console.log('retrieval from cache successful');
                             state.rawTData = data.dohickies;
                             state.tDataMsg = `Successful retrieval from cache for table data for ${tableId}`;
-                            console.log('state inside cache area ', state.rawTData);
                             let modal = document.getElementById('table-modal');
                             modal.classList.remove('hidden');
                             renderTable(tableId, data.dohickies);
@@ -121,7 +118,6 @@ function fetchTableData(tableId) {
     
     let hasCache = false;
     hasCache = checkCacheForTData(tableId, endpnt);
-    console.log('hasCache ', hasCache);
 
     fetch(getReq)
         .then(response => {
@@ -137,7 +133,6 @@ function fetchTableData(tableId) {
             modal.classList.remove('hidden');
 
             if (hasCache) {
-                console.log('has cache');
                 updateTable(tableId);
             } else {
                 let pHead = document.querySelector('.m-body-th-tr'),
@@ -177,11 +172,6 @@ function setUpMButton () { // modal close button, clears table
         clearTable(pHead, pBody);
     });
 }
-
-// function setUpModal () {
-//     let modal = document.getElementById('table-modal');
-//     modal.classList.add('hidden');
-// }
 
 
 
@@ -337,10 +327,18 @@ function setUpStateNoSW () {
 }
 
 function setUpCountNBtns(url, hasCache) {
-    if (url.includes('dohickies')) {
-        fetchDCount(hasCache);
+    if (navigator.onLine) {
+        if (url.includes('dohickies')) {
+            fetchDCount(hasCache);
+        } else {
+            fetchTCount(hasCache);
+        }
     } else {
-        fetchTCount(hasCache);
+        if (url.includes('dohickies')) {
+            renderWidget('.d-widget', state.dCount);
+        } else {
+            renderWidget('.t-widget', state.tCount);
+        }
     }
 }
 
