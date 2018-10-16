@@ -8,10 +8,13 @@ const dashboardURLs = [
 ],
     filesToCache = [
     '/',
-    '/index.html',
+    // '/index.html',
     '/views/list.html',
     '/index.js',
     '/scripts/lists/lists.js',
+    '/scripts/constants/lists.js',
+    '/scripts/dashboard/table-data.js',
+    '/scripts/helpers/renderers.js',
     '/styles/normalize.css',
     '/styles/main.css',
     '/styles/index.css',
@@ -62,6 +65,7 @@ self.addEventListener('fetch', function(e) {
                 .then(function(cache) {
                     return fetch(e.request)
                         .then(function(response) {
+                            console.log('response inside requests ', response);
                             cache.put(e.request.url, response.clone());
     
                             return response;
@@ -69,13 +73,22 @@ self.addEventListener('fetch', function(e) {
                 })
         );
     } else if (dashboardURLs.indexOf(e.request.url) < 0) {
+        console.log('e request ', e.request);
         // NOTE: see if have to readd e.request.url including api in it
         console.log('[Service Worker] ' + e.request.url + ' non dashboard request cache');
         e.respondWith(
             caches.match(e.request)
                 .then(function(response) {
-                    console.log('Exists in cache');
-                    return response || fetch(e.request);
+                    console.log('Exists in cache ', response);
+                    return response || fetch(e.request)
+                        .catch(err => {
+                            console.error(`[Service Worker] Error: ${err}`);
+                            caches.open(e.request.url)
+                                .then(function(nRes) {
+                                    console.log('nRes ', nRes);
+                                    return nRes;
+                                })
+                        });
                 })
         );
     }
