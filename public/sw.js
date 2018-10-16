@@ -8,9 +8,10 @@ const dashboardURLs = [
 ],
     filesToCache = [
     '/',
-    // '/index.html',
+    '/index.html',
     '/views/list.html',
     '/index.js',
+    '/api-res.js',
     '/scripts/lists/lists.js',
     '/scripts/constants/lists.js',
     '/scripts/dashboard/table-data.js',
@@ -58,6 +59,7 @@ self.addEventListener('activate', function(e) {
 self.addEventListener('fetch', function(e) {
     console.log('[Service Worker] fetching ', e.request.url);
 
+    // if it is a dashboard request then run this code
     if (dashboardURLs.indexOf(e.request.url) > - 1) {
         console.log('[Service Worker] ' + e.request.url + 'dashboard request exists in cache');
         e.respondWith(
@@ -69,28 +71,39 @@ self.addEventListener('fetch', function(e) {
                             cache.put(e.request.url, response.clone());
     
                             return response;
-                        });
+                        })
+                        .catch(err => console.error(`[Service Worker] Error: ${err}`));
                 })
         );
     } else if (dashboardURLs.indexOf(e.request.url) < 0) {
-        console.log('e request ', e.request);
-        // NOTE: see if have to readd e.request.url including api in it
+        // if it isn't a dashboard request, then run this code
         console.log('[Service Worker] ' + e.request.url + ' non dashboard request cache');
-        e.respondWith(
-            caches.match(e.request)
-                .then(function(response) {
-                    console.log('Exists in cache ', response);
-                    return response || fetch(e.request)
-                        .catch(err => {
-                            console.error(`[Service Worker] Error: ${err}`);
-                            caches.open(e.request.url)
-                                .then(function(nRes) {
-                                    console.log('nRes ', nRes);
-                                    return nRes;
-                                })
-                        });
-                })
-        );
+        
+        // the list.html file is not directly linked so if the sw does a localhost:3000/list/thingamabobs it returns an error
+        // the first block of code runs when the fetch request is NOT directed at list
+        if (!e.request.url.includes('/list/')) {
+            // NOTE: have to pass in e.request.url because otherwise the js files are not served properly... for some reason e.request works with css and html files just fine
+            e.respondWith(
+                caches.match(e.request.url)
+                    .then(function(response) {
+                        console.log('Exists in cache ', response);
+                        return response || fetch(e.request)
+                            .catch(function(err) {
+                                console.error(`[Service Worker] Error: ${err}`);
+                            });
+                    })
+            );
+        } else {
+            e.respondWith(
+                caches.match('/views/list.html')
+                    .then(function(response) {
+                        return response || fetch(e.request)
+                            .catch(function(err) {
+                                console.error(`[Service Worker] Error: ${err}`);
+                            });
+                    })
+            )
+        }
     }
     
 });
