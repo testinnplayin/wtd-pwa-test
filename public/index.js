@@ -119,35 +119,37 @@ function fetchTableData(tableId) {
     let hasCache = false;
     hasCache = checkCacheForTData(tableId, endpnt);
 
-    fetch(getReq)
-        .then(response => {
-            if (!response.ok) throw new Error(response.statusText);
+    if (navigator.onLine) {
+        fetch(getReq)
+            .then(response => {
+                if (!response.ok) throw new Error(response.statusText);
 
-            return response;
-        })
-        .then(res => res.json())
-        .then(data => {
-            state.rawTData = data.dohickies;
-            state.tDataMsg = `Successful retrieval of table data for ${tableId}`;
-            let modal = document.getElementById('table-modal');
-            modal.classList.remove('hidden');
+                return response;
+            })
+            .then(res => res.json())
+            .then(data => {
+                state.rawTData = data.dohickies;
+                state.tDataMsg = `Successful retrieval of table data for ${tableId}`;
+                let modal = document.getElementById('table-modal');
+                modal.classList.remove('hidden');
 
-            if (hasCache) {
-                updateTable(tableId);
-            } else {
-                let pHead = document.querySelector('.m-body-th-tr'),
-                    pBody = document.querySelector('.m-body-t-body');
+                if (hasCache) {
+                    updateTable(tableId);
+                } else {
+                    let pHead = document.querySelector('.m-body-th-tr'),
+                        pBody = document.querySelector('.m-body-t-body');
 
-                // remove head and body children elements so clears table
-                clearTable(pHead, pBody);
-                renderTable(tableId, data.dohickies);
-            }
-        })
-        .catch(err => {
-            console.error(`Error retrieving table data for ${tableId}: ${err}`);
-            state.rawTData = 'Error';
-            state.tDataMsg = `Error retrieving table data for ${tableId}`;
-        });
+                    // remove head and body children elements so clears table
+                    clearTable(pHead, pBody);
+                    renderTable(tableId, data.dohickies);
+                }
+            })
+            .catch(err => {
+                console.error(`Error retrieving table data for ${tableId}: ${err}`);
+                state.rawTData = 'Error';
+                state.tDataMsg = `Error retrieving table data for ${tableId}`;
+            });
+    }
 }
 
 
@@ -345,7 +347,6 @@ function setUpCountNBtns(url, hasCache) {
 function setUpBtsNMod() {
     setUpWButton(tClick);
     setUpWButton(dClick);
-    // setUpModal();
     setUpMButton();
 }
 
