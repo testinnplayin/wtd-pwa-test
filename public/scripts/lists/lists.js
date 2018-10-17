@@ -2,6 +2,8 @@ import { gReqOpts, resources, uReqOpts } from '../../api-res.js';
 import {viewTitles} from '../constants/lists.js';
 import renderers from '../helpers/renderers.js';
 
+const socket = io('http://192.168.1.46:3000');
+
 'use strict';
 
 const browserLoc = window.location.href;
@@ -76,31 +78,34 @@ function fetchResources(str) {
 }
 
 function updateResource(str, rId) {
-    let newUReqOpts = uReqOpts,
-        putUrl = `${endpnt}/${rId}`;
-    newUReqOpts.body = JSON.stringify(state.dohicky);
-    const putReq = new Request(putUrl, newUReqOpts);
+    // let newUReqOpts = uReqOpts,
+    //     putUrl = `${endpnt}/${rId}`;
+    // newUReqOpts.body = JSON.stringify(state.dohicky);
+    // const putReq = new Request(putUrl, newUReqOpts);
 
-    fetch(putReq)
-        .then(response => {
-            if (!response.ok) throw new Error(response.statusText);
+    const uDoh = state.dohicky;
+    socket.emit('ACTIVATE_DOHICKY', uDoh);
 
-            return response;
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log('Successful put reponse ', data);
-            state[str] = data[str];
-            state.tMsg = `Successful update of ${str} of id ${rId}`;
-            const p = document.createElement('p');
-            document.querySelector('.play-btn-div').appendChild(p);
-            p.textContent = `Dohicky ${rId} is now active!`;
-        })
-        .catch(err => {
-            console.error(`Error updating ${str} of id ${rId}: ${err}`);
-            state[str] = 'Error';
-            state.tMsg = `Error updating ${str}`;
-        });
+    // fetch(putReq)
+    //     .then(response => {
+    //         if (!response.ok) throw new Error(response.statusText);
+
+    //         return response;
+    //     })
+    //     .then(res => res.json())
+    //     .then(data => {
+    //         console.log('Successful put reponse ', data);
+    //         state[str] = data[str];
+    //         state.tMsg = `Successful update of ${str} of id ${rId}`;
+    //         const p = document.createElement('p');
+    //         document.querySelector('.play-btn-div').appendChild(p);
+    //         p.textContent = `Dohicky ${rId} is now active!`;
+    //     })
+    //     .catch(err => {
+    //         console.error(`Error updating ${str} of id ${rId}: ${err}`);
+    //         state[str] = 'Error';
+    //         state.tMsg = `Error updating ${str}`;
+    //     });
 }
 
 
@@ -259,7 +264,31 @@ function setUpInitFetch() {
     }
 }
 
+function activateDohSucc() {
+    socket.on('ACTIVATE_DOH_SUCCESS', response => {
+        console.log('Dohicky activated! ', response);
+        const p = document.createElement('p');
+        document.querySelector('.play-btn-div').appendChild(p);
+        p.textContent = `Dohicky ${response._id} is now active!`;
+    });
+}
+
+function activateDohError() {
+    socket.on('ACTIVATE_DOH_ERROR', err => {
+        console.error('Error activating dohicky! ', err);
+    });
+}
+
+function listenForWhat() {
+    socket.on('WHAT_CREATED', response => {
+        console.log('What created! ', response);
+    });
+}
+
 function setUpList() {
+    activateDohSucc();
+    activateDohError();
+    listenForWhat();
     setUpH1();
     // Thingamabob-specific set up
     setUpH3();

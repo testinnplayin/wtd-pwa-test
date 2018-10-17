@@ -10,6 +10,8 @@ import {
 } from './scripts/dashboard/table-data.js';
 import renderers from './scripts/helpers/renderers.js';
 
+// NOTE: socket io variable io is ported into the index.html file directly
+
 'use strict';
 
 // urls
@@ -425,3 +427,7 @@ if ('serviceWorker' in navigator) {
 } else {
     setUpStateNoSW();
 }
+
+// socket.on('message', function(data) {
+//     console.log('data ', data);
+// });
