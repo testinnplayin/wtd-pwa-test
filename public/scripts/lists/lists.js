@@ -79,6 +79,12 @@ function fetchResources(str) {
 
 // LISTENERS
 
+function addPBtnListener(pBtn) {
+    pBtn.addEventListener('click', e => {
+        console.log('play button click!', e.currentTarget);
+    });
+}
+
 function setUpModalBtn(btn, mId) {
     btn.addEventListener('click', () => {
         document.getElementById(mId).classList.add('hidden');
@@ -119,12 +125,6 @@ function clearModal() {
 
 function clearPlayBtn(pBtn) {
     pBtn.parentNode.removeChild(pBtn);
-}
-
-function addPBtnListener(pBtn) {
-    pBtn.addEventListener('click', e => {
-        console.log('play button click!', e.currentTarget);
-    });
 }
 
 function renderPlayBtn(resource) {
@@ -229,7 +229,6 @@ function setUpList() {
 
     setUpInitFetch();
 
-    // setUpModals();
     setUpModalBtn(document.querySelector('.t-close-btn'), 't-modal');
     setUpModalBtn(document.querySelector('.f-close-btn'), 'f-modal');
 

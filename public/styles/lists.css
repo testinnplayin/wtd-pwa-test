@@ -41,6 +41,21 @@
     padding: 10px;
 }
 
+.play-btn-div {
+    text-align: center;
+}
+
+.play-btn:hover {
+    background-color: #444;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.play-btn {
+    margin-bottom: 25px;
+}
+
 .t-list {
     list-style: none;
     padding: 0;
