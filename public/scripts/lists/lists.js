@@ -25,7 +25,7 @@ let state = {};
 
 // API calls
 
-function fetchThingamabob(str, tId) {
+function fetchResource(str, tId) {
     let url = `${endpnt}/${tId}`;
 
     const getReq = new Request(url, gReqOpts);
@@ -43,7 +43,7 @@ function fetchThingamabob(str, tId) {
             state.tMsg = `Successful retrieval of ${str} of id ${tId}`;
             console.log('state from inside single fetch ', state);
             // TODO: render item
-            renderTItemModal(data[str]);
+            renderTItemModal(data[str], str);
         })
         .catch(err => {
             console.error(`Error retrieving ${str} of id ${tId}`);
@@ -52,7 +52,7 @@ function fetchThingamabob(str, tId) {
         });
 }
 
-function fetchThingamabobs(str) {
+function fetchResources(str) {
     const getReq = new Request(endpnt, gReqOpts);
 
     fetch(getReq)
@@ -88,20 +88,15 @@ function setUpModalBtn(btn, mId) {
     });
 }
 
-// function setUpModals() {
-//     document.getElementById('t-modal').classList.add('hidden');
-//     // document.getElementById('f-modal').classList.add('hidden');
-// }
-
 function createClickListener(eleId) {
     let btn = document.getElementById(eleId);
     btn.addEventListener('click', e => {
         const eId = e.currentTarget.getAttribute('id');
         if (eleId === eId) {
             if (browserLoc.includes('dohickies')) {
-                fetchThingamabob('dohicky', eId);
+                fetchResource('dohicky', eId);
             } else if (browserLoc.includes('thingamabobs')) {
-                fetchThingamabob('thingamabob', eId);
+                fetchResource('thingamabob', eId);
             }
         }
     });
@@ -118,12 +113,22 @@ function clearModal() {
     }
 }
 
-function renderTItemModal(thingamabob) {
+function renderTItemModal(resource, str) {
+    console.log('renderTItemModal ', str);
     document.getElementById('t-modal').classList.remove('hidden');
     let h2 = document.createElement('h2');
     let pDiv = document.querySelector('.t-m-body');
     pDiv.appendChild(h2);
-    h2.textContent = thingamabob.awesome_field;
+    if (str === 'thingamabob') {
+        h2.textContent = resource.awesome_field;
+    } else {
+        console.log('not a thingamabob ', resource);
+        if (resource.thingamabob_id) {
+            h2.textContent = resource.thingamabob_id.awesome_field;
+        } else {
+            h2.textContent = resource.thingamabob_bp.awesome_field;
+        }
+    }
     h2.classList.add('t-m-title');
     h2.classList.add('m-title');
 }
@@ -183,9 +188,9 @@ function setUpAddBtn() {
 
 function setUpInitFetch() {
     if (browserLoc.includes('thingamabobs')) {
-        fetchThingamabobs('thingamabobs');
+        fetchResources('thingamabobs');
     } else if (browserLoc.includes('dohickies')) {
-        fetchThingamabobs('dohickies');
+        fetchResources('dohickies');
     }
 }
 
