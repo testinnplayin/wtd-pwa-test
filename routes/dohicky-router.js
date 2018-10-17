@@ -32,6 +32,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     Dohicky
         .findById(req.params.id)
+        .populate('thingamabob_id')
         .exec()
         .then(dh => {
             if (!dh) {
