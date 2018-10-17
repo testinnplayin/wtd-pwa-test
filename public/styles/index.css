@@ -1,0 +1,57 @@
+.widget:hover {
+    background-color: darkblue;
+    cursor: pointer;
+}
+
+.widget {
+    height: 150px;
+    width: 150px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    background-color: #444;
+    color: #fff;
+    margin: 25px auto;
+}
+
+.widget p {
+    margin-top: 25px;
+    font-weight: bold;
+}
+
+.m-body-table {
+    width: 100%;
+}
+
+.m-body-table tr th,
+.m-body-table tr td {
+    border-bottom: 1px solid #ccc;
+    font-size: 15px;
+    padding: 7% 0;
+}
+
+.warning {
+    color: #f00;
+}
+
+@media all and (min-width: 1280px) {
+
+    .modal-container {
+        height: 100%;
+
+    }
+
+    .modal {
+        width: 70%;
+    }
+
+    .m-body {
+        width: 90%;
+    }
+    
+    .m-body-table tr th,
+    .m-body-table tr td {
+        border-bottom: 1px solid #ccc;
+        font-size: 16px;
+        padding: 10px 0;
+    }
+}

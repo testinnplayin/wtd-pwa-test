@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const thingamabobSchema = mongoose.Schema({
     awesome_field : {
         type : String,
-        default : null
+        default : null,
+        required : true
     }
 });
 
