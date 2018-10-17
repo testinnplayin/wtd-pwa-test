@@ -81,7 +81,14 @@ function fetchResources(str) {
 
 function addPBtnListener(pBtn) {
     pBtn.addEventListener('click', e => {
-        console.log('play button click!', e.currentTarget);
+        // NOTE: state.dohicky should be the same dohicky that was called to populate the modal
+        console.log('play button click!', e.currentTarget, state);
+        const eId = e.currentTarget.getAttribute('id');
+        if (eId === state.dohicky._id) {
+            if (!state.dohicky.is_active) state.dohicky.is_active = !state.dohicky.is_active;
+            // Need to update the back-end here
+            console.log('updated state ', state);
+        }
     });
 }
 
@@ -146,6 +153,7 @@ function renderTItemModal(resource, str) {
     let h2 = document.createElement('h2');
     let pDiv = document.querySelector('.t-m-body');
     pDiv.appendChild(h2);
+
     if (str === 'thingamabob') {
         h2.textContent = resource.awesome_field;
     } else {
@@ -156,6 +164,7 @@ function renderTItemModal(resource, str) {
             h2.textContent = `Dohicky of deleted thingamabob ${resource.thingamabob_bp.awesome_field}`;
         }
     }
+
     h2.classList.add('t-m-title');
     h2.classList.add('m-title');
 }
@@ -231,7 +240,6 @@ function setUpList() {
 
     setUpModalBtn(document.querySelector('.t-close-btn'), 't-modal');
     setUpModalBtn(document.querySelector('.f-close-btn'), 'f-modal');
-
 }
 
 setUpList();
