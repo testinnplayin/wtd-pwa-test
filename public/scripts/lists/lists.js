@@ -150,11 +150,11 @@ function renderTItemModal(resource, str) {
         h2.textContent = resource.awesome_field;
     } else {
         if (resource.thingamabob_id) {
-            h2.textContent = resource.thingamabob_id.awesome_field;
+            h2.textContent = `Dohicky of thingamabob ${resource.thingamabob_id.awesome_field}`;
+            renderPlayBtn(resource);
         } else {
-            h2.textContent = resource.thingamabob_bp.awesome_field;
+            h2.textContent = `Dohicky of deleted thingamabob ${resource.thingamabob_bp.awesome_field}`;
         }
-        renderPlayBtn(resource);
     }
     h2.classList.add('t-m-title');
     h2.classList.add('m-title');
