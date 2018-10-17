@@ -40,7 +40,7 @@ function triggerLoop(newWhat) {
     console.log('---- Whatchamagigger created, loop triggered ----');
     timeout = setInterval(function () {
         createWhat(newWhat);
-        triggerLoop(newWhat);
+        // triggerLoop(newWhat);
     }, 60000);
 }
 
