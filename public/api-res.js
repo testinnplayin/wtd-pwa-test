@@ -1,7 +1,7 @@
 'use strict';
 
 export const resources = {
-    bAddress : 'http://localhost:3000',
+    bAddress : 'http://192.168.1.46:3000',
     api : 'api/dashboard',
     elements : {
         dEle : 'dohickies',
