@@ -4,6 +4,8 @@ const express = require('express');
 const router = express.Router();
 const app = express();
 
+const mongoose = require('mongoose');
+
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended : false }));
 const jsonParser = bodyParser.json();
@@ -60,16 +62,18 @@ router.get('/:id', (req, res) => {
 
 // PUT request at /api/dohickies/:id
 
-router.put('/:id', (req, res) => {
+router.put('/:id', jsonParser, (req, res) => {
     console.log('PUT request ', req.body);
     const str = 'dohicky';
 
     Dohicky
-        .findByIdAndUpdate(req.params.id, { $set : req.body }, { new : true })
+        .findOneAndUpdate({ _id : mongoose.Types.ObjectId(req.params.id) }, { $set : req.body }, { new : true })
         .then(doh => {
             if (!doh) {
                 return get404(res, `${str} of id ${req.params.id}`);
             }
+
+            // (doh.is_active) ? triggerWhatCreation(doh) : stopWhatLoop();
             
             return getSuccess(res, doh, str, 200);
         })

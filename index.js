@@ -71,6 +71,8 @@ app.use('*', (req, res) => {
     return res.status(404).json({ message : 'Path not found' });
 });
 
+mongoose.set('useFindAndModify', false);
+
 mongoose.connect(dbURL, { useNewUrlParser : true })
     .then(() => {
         console.log('---- Connecting to database ----');

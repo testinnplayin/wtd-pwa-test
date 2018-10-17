@@ -92,7 +92,9 @@ function updateResource(str, rId) {
             console.log('Successful put reponse ', data);
             state[str] = data[str];
             state.tMsg = `Successful update of ${str} of id ${rId}`;
-            alert(`Dohicky ${rId} is now active!`);
+            const p = document.createElement('p');
+            document.querySelector('.play-btn-div').appendChild(p);
+            p.textContent = `Dohicky ${rId} is now active!`;
         })
         .catch(err => {
             console.error(`Error updating ${str} of id ${rId}: ${err}`);
