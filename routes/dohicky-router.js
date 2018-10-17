@@ -21,6 +21,8 @@ const {
     getSuccess
 } = require('../src/handlers/success-handlers');
 
+const { stopWhatLoop, triggerWhatCreation } = require('../src/whatchamagigger/what-generator');
+
 
 // HTTP requests
 
@@ -73,7 +75,9 @@ router.put('/:id', jsonParser, (req, res) => {
                 return get404(res, `${str} of id ${req.params.id}`);
             }
 
-            // (doh.is_active) ? triggerWhatCreation(doh) : stopWhatLoop();
+            console.log('doh active ', (doh.is_active) ? 'true' : 'false');
+
+            (doh.is_active) ? triggerWhatCreation(doh) : stopWhatLoop();
             
             return getSuccess(res, doh, str, 200);
         })
