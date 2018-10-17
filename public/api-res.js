@@ -13,3 +13,10 @@ export const resources = {
 };
 
 export const gReqOpts = { method : 'GET', mode : 'cors' };
+export let uReqOpts = {
+    method : 'PUT',
+    mode : 'cors',
+    headers : {
+        'Content-Type' : 'application/json'
+    }
+};

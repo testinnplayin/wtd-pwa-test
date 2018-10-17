@@ -1,4 +1,4 @@
-import { gReqOpts, resources } from '../../api-res.js';
+import { gReqOpts, resources, uReqOpts } from '../../api-res.js';
 import {viewTitles} from '../constants/lists.js';
 import renderers from '../helpers/renderers.js';
 
@@ -75,6 +75,32 @@ function fetchResources(str) {
         });
 }
 
+function updateResource(str, rId) {
+    let newUReqOpts = uReqOpts,
+        putUrl = `${endpnt}/${rId}`;
+    newUReqOpts.body = JSON.stringify(state.dohicky);
+    const putReq = new Request(putUrl, newUReqOpts);
+
+    fetch(putReq)
+        .then(response => {
+            if (!response.ok) throw new Error(response.statusText);
+
+            return response;
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log('Successful put reponse ', data);
+            state[str] = data[str];
+            state.tMsg = `Successful update of ${str} of id ${rId}`;
+            alert(`Dohicky ${rId} is now active!`);
+        })
+        .catch(err => {
+            console.error(`Error updating ${str} of id ${rId}: ${err}`);
+            state[str] = 'Error';
+            state.tMsg = `Error updating ${str}`;
+        });
+}
+
 
 
 // LISTENERS
@@ -88,6 +114,7 @@ function addPBtnListener(pBtn) {
             if (!state.dohicky.is_active) state.dohicky.is_active = !state.dohicky.is_active;
             // Need to update the back-end here
             console.log('updated state ', state);
+            updateResource('dohicky', eId);
         }
     });
 }

@@ -2,6 +2,11 @@
 
 const express = require('express');
 const router = express.Router();
+const app = express();
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended : false }));
+const jsonParser = bodyParser.json();
 
 const {Dohicky} = require('../src/models/dohicky');
 
@@ -14,6 +19,12 @@ const {
     getSuccess
 } = require('../src/handlers/success-handlers');
 
+
+// HTTP requests
+
+// GET requests
+
+// GET all at /api/dohickies/
 router.get('/', (req, res) => {
     Dohicky
         .find()
@@ -29,6 +40,7 @@ router.get('/', (req, res) => {
         .catch(err => get500(res, err, `cannot fetch dohickhies`));
 });
 
+// GET specific dohicky at /api/dohickies/:id
 router.get('/:id', (req, res) => {
     Dohicky
         .findById(req.params.id)
@@ -42,6 +54,26 @@ router.get('/:id', (req, res) => {
             return getSuccess(res, dh, 'dohicky', 200);
         })
         .catch(err => get500(res, err, `cannot fetch dohicky of id ${req.params.id}`));
+});
+
+
+
+// PUT request at /api/dohickies/:id
+
+router.put('/:id', (req, res) => {
+    console.log('PUT request ', req.body);
+    const str = 'dohicky';
+
+    Dohicky
+        .findByIdAndUpdate(req.params.id, { $set : req.body }, { new : true })
+        .then(doh => {
+            if (!doh) {
+                return get404(res, `${str} of id ${req.params.id}`);
+            }
+            
+            return getSuccess(res, doh, str, 200);
+        })
+        .catch(err => get500(res, err, str));
 });
 
 module.exports = router;
