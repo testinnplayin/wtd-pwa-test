@@ -1,10 +1,10 @@
 'use strict';
 
 const dashboardURLs = [
-    'http://localhost:3000/api/dashboard/thingamabobs/count',
-    'http://localhost:3000/api/dashboard/dohickies/count',
-    'http://localhost:3000/api/dashboard/thingamabobs/table',
-    'http://localhost:3000/api/dashboard/dohickies/table'
+    'http://192.168.1.46:3000/api/dashboard/thingamabobs/count',
+    'http://192.168.1.46:3000/api/dashboard/dohickies/count',
+    'http://192.168.1.46:3000/api/dashboard/thingamabobs/table',
+    'http://192.168.1.46:3000/api/dashboard/dohickies/table'
 ],
     filesToCache = [
     '/',
@@ -58,7 +58,6 @@ self.addEventListener('activate', function(e) {
 
 self.addEventListener('fetch', function(e) {
     console.log('[Service Worker] fetching ', e.request.url);
-
     // if it is a dashboard request then run this code
     if (dashboardURLs.indexOf(e.request.url) > - 1) {
         console.log('[Service Worker] ' + e.request.url + 'dashboard request exists in cache');
