@@ -42,7 +42,6 @@ function fetchResource(str, tId) {
             state[str] = data[str];
             state.tMsg = `Successful retrieval of ${str} of id ${tId}`;
             console.log('state from inside single fetch ', state);
-            // TODO: render item
             renderTItemModal(data[str], str);
         })
         .catch(err => {
@@ -85,6 +84,11 @@ function setUpModalBtn(btn, mId) {
         document.getElementById(mId).classList.add('hidden');
         
         clearModal();
+
+        const pBtn = document.querySelector('.play-btn-div');
+        if (pBtn) {
+            clearPlayBtn(pBtn);
+        }
     });
 }
 
@@ -113,8 +117,31 @@ function clearModal() {
     }
 }
 
+function clearPlayBtn(pBtn) {
+    pBtn.parentNode.removeChild(pBtn);
+}
+
+function addPBtnListener(pBtn) {
+    pBtn.addEventListener('click', e => {
+        console.log('play button click!', e.currentTarget);
+    });
+}
+
+function renderPlayBtn(resource) {
+    const div = document.createElement('div');
+    document.querySelector('.inner-m-div').appendChild(div);
+    div.classList.add('play-btn-div');
+
+    const pBtn = document.createElement('button');
+    div.appendChild(pBtn);
+    pBtn.classList.add('play-btn');
+    pBtn.setAttribute('id', resource._id);
+    pBtn.textContent = 'Play';
+
+    addPBtnListener(pBtn);
+}
+
 function renderTItemModal(resource, str) {
-    console.log('renderTItemModal ', str);
     document.getElementById('t-modal').classList.remove('hidden');
     let h2 = document.createElement('h2');
     let pDiv = document.querySelector('.t-m-body');
@@ -122,12 +149,12 @@ function renderTItemModal(resource, str) {
     if (str === 'thingamabob') {
         h2.textContent = resource.awesome_field;
     } else {
-        console.log('not a thingamabob ', resource);
         if (resource.thingamabob_id) {
             h2.textContent = resource.thingamabob_id.awesome_field;
         } else {
             h2.textContent = resource.thingamabob_bp.awesome_field;
         }
+        renderPlayBtn(resource);
     }
     h2.classList.add('t-m-title');
     h2.classList.add('m-title');
