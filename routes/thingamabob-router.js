@@ -78,6 +78,7 @@ router.post('/', jsonParser, (req, res) => {
             }
 
             const newDoh = {
+                is_active : false,
                 is_ok : true,
                 thingamabob_id : newT._id,
                 thingamabob_bp : newT
