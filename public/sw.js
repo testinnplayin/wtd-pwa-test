@@ -1,10 +1,10 @@
 'use strict';
 
 const dashboardURLs = [
-    'http://192.168.1.46:3000/api/dashboard/thingamabobs/count',
-    'http://192.168.1.46:3000/api/dashboard/dohickies/count',
-    'http://192.168.1.46:3000/api/dashboard/thingamabobs/table',
-    'http://192.168.1.46:3000/api/dashboard/dohickies/table'
+    'https://192.168.1.46:3000/api/dashboard/thingamabobs/count',
+    'https://192.168.1.46:3000/api/dashboard/dohickies/count',
+    'https://192.168.1.46:3000/api/dashboard/thingamabobs/table',
+    'https://192.168.1.46:3000/api/dashboard/dohickies/table'
 ],
     filesToCache = [
     '/',

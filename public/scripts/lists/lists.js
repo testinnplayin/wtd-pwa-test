@@ -3,7 +3,7 @@ import {viewTitles} from '../constants/lists.js';
 import renderers from '../helpers/renderers.js';
 import listeners from '../helpers/events.js';
 
-const socket = io('http://192.168.1.46:3000');
+const socket = io('https://192.168.1.46:3000');
 
 'use strict';
 
@@ -76,6 +76,7 @@ function fetchResources(str) {
 
 function activateDohicky() {
     const uDoh = state.dohicky;
+    console.log('ACTIVATE_DOHICKY');
     socket.emit('ACTIVATE_DOHICKY', uDoh);
 }
 
@@ -138,24 +139,6 @@ function activateDohError() {
         console.error('Error activating dohicky! ', err);
     });
 }
-
-// function listenForWhat() {
-//     socket.on('WHAT_CREATED', response => {
-//         console.log('What created! ', response);
-//         console.log(Notification.permission)
-//         if ('serviceWorker' in navigator && Notification.permission === 'granted') {
-//             navigator.serviceWorker.getRegistration()
-//                 .then(registration => {
-//                     console.log('got registered sw ', registration);
-//                     const options = {
-//                         body : `New whatchamagigger created for thingamabob ${response.thingamabob_msg}`
-//                     };
-//                     registration.showNotification('New Whatchamagigger', options);
-//                 })
-//                 .catch(err => console.error(`Error: ${err}`));
-//         }
-//     });
-// }
 
 
 
