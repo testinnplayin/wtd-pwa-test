@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Thingamabob App</title>
+    <link rel="stylesheet" href="/styles/normalize.css" />
+    <link rel="stylesheet" href="/styles/main.css" />
+    <link rel="stylesheet" href="/styles/lists.css" />
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <li><a href="/">Home</a></li>
+        <li><a href="/list/thingamabobs">Thingamabobs</a></li>
+        <li><a href="/list/dohickies">Dohickies</a></li>
+        <li><a href="">Whatchamagiggers</a></li>
+    </nav>
+
+    <!-- List area -->
+    <main>
+        <section class="list-area">
+            <h1 class="view-title"></h1>
+            <ul class="t-list">
+                
+            </ul>
+        </section>
+
+        <!-- Thingamabob only button -->
+        <section class="t-button-sexn hidden">
+            <h3 class="t-h3">Add New Thingamabob</h3>
+            <button class="t-add">+</button>
+        </section>
+    </main>
+
+    <!-- Information modal -->
+    <div class="t-modal-container modal-container hidden" id="t-modal">
+        <div class="modal inner-m-div">
+            <div class="t-m-header m-header">
+                <button class="btn t-close-btn">X</button>
+            </div>
+            <div class="t-m-body m-body">
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Form modal -->
+    <div class="t-modal-container modal-container hidden" id="f-modal">
+        <div class="modal">
+            <div class="t-m-header m-header">
+                <button class="btn f-close-btn">X</button>
+            </div>
+            <div class="f-m-body m-body">
+                <form id="t-form">
+                    <div class="form-group">
+                        <label for="awesome-field">Awesome Field:</label>
+                        <input autofocus id="awesome-field" name="awesome-field" placeholder="Enter something awesome!" type="text" />
+                    </div>
+                    <button class="form-btn" type="submit">Create New Thingamabob</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Scripts -->
+    <script src="../scripts/lists/lists.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+.modal {
+    min-height: 200px;
+    margin: 50% auto;
+}
+
+.m-body {
+    min-height: 150px;
+}
+
+#t-form {
+    height: 100%;
+    /* padding: 20px 0; */
+    text-align: center;
+    width: 100%;
+}
+
+.form-group {
+    margin: 15px auto;
+    width: 100%;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 15px;
+    margin-left: -99px;
+}
+
+.form-group input {
+    padding: 15px 0;
+}
+
+.form-btn:hover {
+    background-color: #444;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.form-btn {
+    padding: 10px;
+}
+
+.play-btn-div {
+    text-align: center;
+}
+
+.play-btn:hover {
+    background-color: #444;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.play-btn {
+    margin-bottom: 25px;
+}
+
+.t-list {
+    list-style: none;
+    padding: 0;
+}
+
+.t-list li {
+    display: block;
+    margin: 15px auto;
+    width: 95%;
+}
+
+.list-btn:hover {
+    background-color: darkblue;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.list-btn {
+    border: 1px solid #444;
+    padding: 20px 0;
+    width: 100%;
+}
+
+.t-add:hover {
+    background-color: green;
+    color: #fff;
+    cursor: pointer;
+}
+
+.t-add {
+    background-color: #fff;
+    border: 1px solid green;
+    border-radius: 100%;
+    color: green;
+    font-size: 18px;
+    font-weight: bold;
+
+}
