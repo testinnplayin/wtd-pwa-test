@@ -10,6 +10,8 @@ import {
 } from './scripts/dashboard/table-data.js';
 import renderers from './scripts/helpers/renderers.js';
 
+// NOTE: socket io variable io is ported into the index.html file directly
+
 'use strict';
 
 // urls
@@ -391,6 +393,21 @@ function getStuffOutOfCache() {
     }
 }
 
+function askForNotifPermission(registration) {
+    Notification.requestPermission(status => {
+        console.log('Notification permission status ', status);
+
+        if (status === 'granted') {
+            const options = {
+                body : 'You are now subscribed to notifications!',
+                vibrate : [300, 100, 400]
+            };
+            
+            registration.showNotification('Subscription to notifications', options);
+        }
+    });
+}
+
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations()
         .then(registrations => {
@@ -406,6 +423,7 @@ if ('serviceWorker' in navigator) {
                         // NOTE: deactivate the caches conditional and run the caches code outside and below if need to update the service worker
                         
                         getStuffOutOfCache();
+                        askForNotifPermission(registration);
                     })
                     .catch(err => console.error(`[Service Worker] registration error: ${err}`));
             } else {

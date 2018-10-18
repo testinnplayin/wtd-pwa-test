@@ -6,17 +6,20 @@ const {Whatchamagigger} = require('../models/whatchamagigger');
 
 let timeout;
 
-function createWhat(newWhat) {
+function createWhat(newWhat, socket) {
     console.log('---- Creating new whatchamagigger! ----');
+    console.log('newWhat ', newWhat);
+    console.log((socket) ? 'true' : 'false');
     Whatchamagigger
         .create(newWhat)
-        .then(() => {
-        console.log('---- Whatchamagigger created ----');
+        .then(wat => {
+            console.log('---- Whatchamagigger created ----');
+            socket.emit('WHAT_CREATED', wat);
         })
         .catch(err => console.error(`Error: creating whatchamagigger: ${err}`));
 }
 
-function triggerWhatCreation(doh) {
+function triggerWhatCreation(doh, socket) {
     const newWhat = {
         is_ok : true,
         thingamabob_msg : doh.thingamabob_bp.awesome_field,
@@ -25,18 +28,20 @@ function triggerWhatCreation(doh) {
 
     Whatchamagigger
         .create(newWhat)
-        .then(() => {
+        .then(wat => {
             console.log('---- Whatchamagigger created, loop triggered ----');
-            triggerLoop(newWhat);
+            socket.emit('WHAT_CREATED', wat);
+            triggerLoop(newWhat, socket);
         })
         .catch(err => console.error(`Error: creating whatchamagigger: ${err}`));
 
-    timeout = triggerLoop(newWhat);
+    // timeout = triggerLoop(newWhat);
 }
 
-function triggerLoop(newWhat) {
+function triggerLoop(newWhat, socket) {
+    console.log('triggerLoop');
     timeout = setInterval(function () {
-        createWhat(newWhat);
+        createWhat(newWhat, socket);
     }, 60000);
 }
 

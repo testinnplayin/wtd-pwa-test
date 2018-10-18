@@ -106,3 +106,7 @@ self.addEventListener('fetch', function(e) {
     }
     
 });
+
+self.addEventListener('push', function(e) {
+    console.log('[Service Worker] heard a push event');
+});
