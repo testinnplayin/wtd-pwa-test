@@ -8,11 +8,13 @@ let timeout;
 
 function createWhat(newWhat, socket) {
     console.log('---- Creating new whatchamagigger! ----');
+    console.log('newWhat ', newWhat);
+    console.log((socket) ? 'true' : 'false');
     Whatchamagigger
         .create(newWhat)
         .then(wat => {
             console.log('---- Whatchamagigger created ----');
-            socket.emit('WHAT_CREATED', `New whatchamagigger created ${wat._id}`);
+            socket.emit('WHAT_CREATED', wat);
         })
         .catch(err => console.error(`Error: creating whatchamagigger: ${err}`));
 }
@@ -28,15 +30,16 @@ function triggerWhatCreation(doh, socket) {
         .create(newWhat)
         .then(wat => {
             console.log('---- Whatchamagigger created, loop triggered ----');
-            socket.emit('WHAT_CREATED', `New whatchamagigger created ${wat._id}`);
+            socket.emit('WHAT_CREATED', wat);
             triggerLoop(newWhat, socket);
         })
         .catch(err => console.error(`Error: creating whatchamagigger: ${err}`));
 
-    timeout = triggerLoop(newWhat);
+    // timeout = triggerLoop(newWhat);
 }
 
 function triggerLoop(newWhat, socket) {
+    console.log('triggerLoop');
     timeout = setInterval(function () {
         createWhat(newWhat, socket);
     }, 60000);

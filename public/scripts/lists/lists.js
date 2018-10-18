@@ -1,6 +1,7 @@
 import { gReqOpts, resources, uReqOpts } from '../../api-res.js';
 import {viewTitles} from '../constants/lists.js';
 import renderers from '../helpers/renderers.js';
+import listeners from '../helpers/events.js';
 
 const socket = io('http://192.168.1.46:3000');
 
@@ -14,10 +15,6 @@ if (browserLoc.includes('thingamabobs')) {
 } else if (browserLoc.includes('dohickies')){
     endpnt += resources.elements.dEle;
 }
-
-console.log('endpnt ', endpnt);
-
-
 
 // state object
 
@@ -77,35 +74,9 @@ function fetchResources(str) {
         });
 }
 
-function updateResource(str, rId) {
-    // let newUReqOpts = uReqOpts,
-    //     putUrl = `${endpnt}/${rId}`;
-    // newUReqOpts.body = JSON.stringify(state.dohicky);
-    // const putReq = new Request(putUrl, newUReqOpts);
-
+function activateDohicky() {
     const uDoh = state.dohicky;
     socket.emit('ACTIVATE_DOHICKY', uDoh);
-
-    // fetch(putReq)
-    //     .then(response => {
-    //         if (!response.ok) throw new Error(response.statusText);
-
-    //         return response;
-    //     })
-    //     .then(res => res.json())
-    //     .then(data => {
-    //         console.log('Successful put reponse ', data);
-    //         state[str] = data[str];
-    //         state.tMsg = `Successful update of ${str} of id ${rId}`;
-    //         const p = document.createElement('p');
-    //         document.querySelector('.play-btn-div').appendChild(p);
-    //         p.textContent = `Dohicky ${rId} is now active!`;
-    //     })
-    //     .catch(err => {
-    //         console.error(`Error updating ${str} of id ${rId}: ${err}`);
-    //         state[str] = 'Error';
-    //         state.tMsg = `Error updating ${str}`;
-    //     });
 }
 
 
@@ -121,7 +92,7 @@ function addPBtnListener(pBtn) {
             if (!state.dohicky.is_active) state.dohicky.is_active = !state.dohicky.is_active;
             // Need to update the back-end here
             console.log('updated state ', state);
-            updateResource('dohicky', eId);
+            activateDohicky();
         }
     });
 }
@@ -152,6 +123,39 @@ function createClickListener(eleId) {
         }
     });
 }
+
+function activateDohSucc() {
+    socket.on('ACTIVATE_DOH_SUCCESS', response => {
+        console.log('Dohicky activated! ', response);
+        const p = document.createElement('p');
+        document.querySelector('.play-btn-div').appendChild(p);
+        p.textContent = `Dohicky ${response._id} is now active!`;
+    });
+}
+
+function activateDohError() {
+    socket.on('ACTIVATE_DOH_ERROR', err => {
+        console.error('Error activating dohicky! ', err);
+    });
+}
+
+// function listenForWhat() {
+//     socket.on('WHAT_CREATED', response => {
+//         console.log('What created! ', response);
+//         console.log(Notification.permission)
+//         if ('serviceWorker' in navigator && Notification.permission === 'granted') {
+//             navigator.serviceWorker.getRegistration()
+//                 .then(registration => {
+//                     console.log('got registered sw ', registration);
+//                     const options = {
+//                         body : `New whatchamagigger created for thingamabob ${response.thingamabob_msg}`
+//                     };
+//                     registration.showNotification('New Whatchamagigger', options);
+//                 })
+//                 .catch(err => console.error(`Error: ${err}`));
+//         }
+//     });
+// }
 
 
 
@@ -264,31 +268,10 @@ function setUpInitFetch() {
     }
 }
 
-function activateDohSucc() {
-    socket.on('ACTIVATE_DOH_SUCCESS', response => {
-        console.log('Dohicky activated! ', response);
-        const p = document.createElement('p');
-        document.querySelector('.play-btn-div').appendChild(p);
-        p.textContent = `Dohicky ${response._id} is now active!`;
-    });
-}
-
-function activateDohError() {
-    socket.on('ACTIVATE_DOH_ERROR', err => {
-        console.error('Error activating dohicky! ', err);
-    });
-}
-
-function listenForWhat() {
-    socket.on('WHAT_CREATED', response => {
-        console.log('What created! ', response);
-    });
-}
-
 function setUpList() {
     activateDohSucc();
     activateDohError();
-    listenForWhat();
+    listeners.listenForWhat(socket);
     setUpH1();
     // Thingamabob-specific set up
     setUpH3();
