@@ -2,8 +2,18 @@
 
 const express = require('express');
 const app = express();
-const http = require('http').Server(app);
+
 const path = require('path');
+const fs = require('fs');
+
+const https_options = {
+    key : fs.readFileSync((path.join(__dirname, './certs', 'device.key')), 'utf-8'),
+    cert : fs.readFileSync((path.join(__dirname, './certs', 'device.crt')), 'utf-8'),
+    requestCert : false
+};
+
+const https = require('https').Server(https_options, app);
+
 
 const cors = require('cors');
 const arrOrigins = [
@@ -12,6 +22,7 @@ const arrOrigins = [
     "https://localhost:8080",
     "http://localhost:8081",
     'http://localhost:3000',
+    'https://localhost:3000',
     "localhost:8080",
     "*"
 ];
@@ -36,7 +47,7 @@ mongoose.Promise = global.Promise;
 
 const morgan = require('morgan');
 
-const io = require('socket.io')(http);
+const io = require('socket.io')(https);
 
 const {dbURL, port} = require('./config');
 
@@ -80,7 +91,7 @@ mongoose.set('useFindAndModify', false);
 mongoose.connect(dbURL, { useNewUrlParser : true })
     .then(() => {
         console.log('---- Connecting to database ----');
-        http.listen(port, () => {
+        https.listen(port, () => {
             console.log(`Server listening on port ${port}`);
         });
     })
