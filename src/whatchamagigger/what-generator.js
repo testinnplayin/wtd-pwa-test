@@ -1,8 +1,5 @@
 'use strict';
 
-const io = require('socket.io');
-const socket = io();
-
 const mongoose = require('mongoose');
 
 const {Whatchamagigger} = require('../models/whatchamagigger');
