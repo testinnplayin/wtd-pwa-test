@@ -186,7 +186,7 @@ To try out this app, first we're assuming that the tester has the following inst
 - Git
 - Development-friendly text editor such as Sublime, Atom, Visual Studio Code, etc.
 
-We're also assuming that the tester is knowledgeable in the use of NPM, MongoDB and Git.
+We're also assuming that the tester is knowledgeable in the use of NPM, MongoDB and Git. They should also know how to generate a private and public key or a basic understanding of SSL/TLS in order to set up the HTTPS part.
 
 [Top](#toc)
 
@@ -204,6 +204,12 @@ Check what the public TCP/IP of the local machine is and be sure to update the u
 
 Note that that public TCP/IP is what should be used to connect to the running app on the phone.
 
+In order to set up the HTTPS, please following this doc:
+
+[https://nodejs.org/api/tls.html#tls_tls_ssl_concepts](https://nodejs.org/api/tls.html#tls_tls_ssl_concepts)
+
+The public key generated from these steps must be installed and added to the certifications on whatever browser will be used on the local machine but also on any phone. This can be done via USB cable. The tester will know it's set up properly when they see a green padlock icon in the left-hand corner of the url bar of their browser.
+
 Be sure that MongoDB is running before trying to start the server.
 
 To run the server, type either:
@@ -216,4 +222,6 @@ or
 
 Once connection to the database is confirmed, there should also be a message saying that the server is listening.
 
-Visit https://localhost:3000 to hit the index page.
+Visit https://localhost:3000 to hit the index page if on the local machine. If not, visit the page at the public TCP/IP address mentioned above on the phone, assuming the phone is on the same internet box/router. This has not been set up for using a phone on a cellular network.
+
+[Top](Toc)
