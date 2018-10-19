@@ -16,6 +16,10 @@ II. [Architecture](#architecture)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. [The Service Worker](#sw)
 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. [Socket Events](#sockets)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. [HTTPS Mode](#https)
+
 ----
 
 <a name="intro"></a>
@@ -135,10 +139,30 @@ There is also an offline component, only put in place for the dashboard view. Na
 <a name="sw"></a>
 ### 1. The Service Worker
 
-A service worker was implemented and tested mainly on a recent version of Chrome and Chrome Mobile. We only had time to put into place the dashboard to its fullest. We only used the caches API for our test. The entire shell of the app was cached so that the user can visit any view in the app and still see what is expected even if he loses internet access. Since this is a simple test, we did not do any cache management or using any other form of storage in conjunction with it. 
+A service worker was implemented and tested mainly on a recent version of Chrome and Chrome Mobile (on Android). We only had time to put into place the dashboard to its fullest. We only used the caches API for our test. The entire shell of the app was cached so that the user can visit any view in the app and still see what is expected even if he loses internet access. Since this is a simple test, we did not do any cache management or using any other form of storage in conjunction with it. 
 
 What is important though is that some back-end resources are also set up to be cached, mainly the counts of Thingamabobs and Dohickies. If the user opens a table, that table data is also stored in the cache.
 
 The service worker is also semi-set up for dealing with push notifications though the current test system bypasses it.
+
+The service worker is set up to only register and install once from inside index.js otherwise it installs everytime the user visits the index.html view. Its scope is set to work on all of the public portion of the app and thus was placed at the root of the public/ folder.
+
+Please note that it is supposed to work in conjunction with the manifest.json, which contains a theme, background color, titles and icons for the 'native' app on cell phones but so far only the icons and 'executable' seem to work properly.
+
+[Top](#toc)
+
+<a name="sockets"></a>
+### 2. Socket Events
+
+So far only there are two socket events set up: Dohicky activation and Whatchamagigger creation. The latter is hooked up to a push notification system.
+
+[Top](#toc)
+
+<a name="https"></a>
+### 3. HTTPS Mode
+
+This is a very important thing to keep in mind. Even though localhost tests are supposedly exempt from having to be put into HTTPS mode, we could not get any installation or push notification tests working on even a USB-connected Android phone. Google Dev Tools saw the phone just fine but the phone never installed the service worker and without the service worker only the default functionality was put into place (no alerts or prompts were coded to replace push notifications if the Notification API is not supported). 
+
+HTTPS mode added as a last step in order to be able to install the app on a phone and test the push notifications. In the current version, the certs/ folder contains the private and public keys for getting the server's HTTPS to work. The user has to install the public key on their computer and then add it to the list of certifications the browser uses. Once this is done, the user can visit the app, install it on their phone and execute it.
 
 [Top](#toc)
