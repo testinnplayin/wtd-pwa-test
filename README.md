@@ -12,6 +12,10 @@ II. [Architecture](#architecture)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. [Details on Organization of Files](#f-struct-dets)
 
+&nbsp;&nbsp;&nbsp;&nbsp;B. [Functional Architecture and Behavior of the App](#func-arch)
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. [The Service Worker](#sw)
+
 ----
 
 <a name="intro"></a>
@@ -105,3 +109,36 @@ The point of entry of the front-end is index.html. There is only one other view 
 
 The other js-related directories and files contain modularized code or constants to aid in maintaining and keeping repetition to a minimum.
 
+Other front-end resources, such as icons, are also stored and served from the public/ folder. The manifest.json file, for creating a believable fake native app on a phone, is at the root of this folder.
+
+[Top](#toc)
+
+<a name="func-arch"></a>
+## B. Functional Architecture and Behavior of the App
+
+This PWA is a Multi-Page Application that has the server sending HTML/CSS/JS files to the client. Since this was a test project, there is no build or bundler or anything sophisticated. Everything is sent directly from the public/ folder.
+
+The back-end, as previously mentioned, is on Node.js with Express.js and Mongoose. The database used is MongoDB, which stores the three collections Thingamabobs, Dohickies and Whatchamagiggers.
+
+The front-end is spartanly coded with ES6 JavaScript. To avoid having to call the server to resend the entire HTML page when there is a change, the global state pattern was used for updating only the elements that change. Front-end modules are used so that code is not repeated.
+
+The app is divided into four views, one of which has not been coded. The landing page is a dashboard containing two widgets both with the number of Thingamabobs and Dohickies that exist in their collections. When the user clicks on a widget, a modal pops up with more details organized in a tabular fashion.
+
+The user can also navigate to the other views, which are all lists. When arriving, for example, on /thingamabobs, the user sees a list and an add button. On clicking on an element in the list, a modal appears with more details about the Thingamabob. Clicking on the add button opens a form-based modal, which has not been fully implemented. On the /dohickies list view, clicking on a dohicky opens a modal not only with more information on the Dohicky but also a play button. When the user clicks on the play button, the Dohicky is activated and a Whatchamagigger creation loop is triggered.
+
+Each time a new Whatchamagigger is created (once a minute), the user receives a push notification about the fact.
+
+There is also an offline component, only put in place for the dashboard view. Namely the idea is that the user can still visit the dashboard and other pages but also the dashboard widgets still function annd the user can still see a count in the widgets themselves. As such, a cache-first-update-later strategy was used.
+
+[Top](#toc)
+
+<a name="sw"></a>
+### 1. The Service Worker
+
+A service worker was implemented and tested mainly on a recent version of Chrome and Chrome Mobile. We only had time to put into place the dashboard to its fullest. We only used the caches API for our test. The entire shell of the app was cached so that the user can visit any view in the app and still see what is expected even if he loses internet access. Since this is a simple test, we did not do any cache management or using any other form of storage in conjunction with it. 
+
+What is important though is that some back-end resources are also set up to be cached, mainly the counts of Thingamabobs and Dohickies. If the user opens a table, that table data is also stored in the cache.
+
+The service worker is also semi-set up for dealing with push notifications though the current test system bypasses it.
+
+[Top](#toc)
