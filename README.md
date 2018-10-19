@@ -160,7 +160,7 @@ Please note that it is supposed to work in conjunction with the manifest.json, w
 <a name="sockets"></a>
 ### 2. Socket Events
 
-So far only there are two socket events set up: Dohicky activation and Whatchamagigger creation. The latter is hooked up to a push notification system.
+So far there are two socket events set up: Dohicky activation and Whatchamagigger creation. The latter is hooked up to a push notification system.
 
 [Top](#toc)
 
