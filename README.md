@@ -138,7 +138,7 @@ The user can also navigate to the other views, which are all lists. When arrivin
 
 Each time a new Whatchamagigger is created (once a minute), the user receives a push notification about the fact.
 
-There is also an offline component, only put in place for the dashboard view. Namely the idea is that the user can still visit the dashboard and other pages but also the dashboard widgets still function annd the user can still see a count in the widgets themselves. As such, a cache-first-update-later strategy was used.
+There is also an offline component, only put in place for the dashboard view. Namely the idea is that the user can still visit the dashboard and other pages but also the dashboard widgets still function and the user can still see a count in the widgets themselves. As such, a cache-first-update-later strategy was used.
 
 [Top](#toc)
 
