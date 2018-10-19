@@ -176,7 +176,7 @@ HTTPS mode added as a last step in order to be able to install the app on a phon
 <a name="installation"></a>
 # III. Installation on Local Machine
 
-Note that to install the PWA on a phone or tablet, the tester must have installed the PWA on his local machine first and have started the database and server (in that order) plus installed a public key on the phone that works with the HTTPS that has been added to the browser on the phone. Once all of that is in place, after a little while of visiting the site on the phone, the user should see a prompt appear that asks if he wants to install the app on his phone. Once he taps ok on the prompt, the app will install and will either be added to the desktop or to the list of apps on the phone.
+In order to install the PWA on a phone or tablet, the tester must have installed the PWA on his local machine first and have started the database and server (in that order) plus installed a public key on the phone that has been added to the browser so that it works with HTTPS. Once all of that is in place, after a little while of visiting the site on the phone, the user should see a prompt appear that asks if he wants to install the app on his phone. Once he taps ok on the prompt, the app will install and will either be added to the desktop or to the list of apps on the phone.
 
 [Top](#toc)
 
