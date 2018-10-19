@@ -20,6 +20,12 @@ II. [Architecture](#architecture)
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. [HTTPS Mode](#https)
 
+III . [Installation on Local Machine](#installation)
+
+&nbsp;&nbsp;&nbsp;&nbsp;A. [Requirements](#requirements)
+
+&nbsp;&nbsp;&nbsp;&nbsp;B. [Installing and Set Up](#setup)
+
 ----
 
 <a name="intro"></a>
@@ -166,3 +172,48 @@ This is a very important thing to keep in mind. Even though localhost tests are 
 HTTPS mode added as a last step in order to be able to install the app on a phone and test the push notifications. In the current version, the certs/ folder contains the private and public keys for getting the server's HTTPS to work. The user has to install the public key on their computer and then add it to the list of certifications the browser uses. Once this is done, the user can visit the app, install it on their phone and execute it.
 
 [Top](#toc)
+
+<a name="installation"></a>
+# III. Installation on Local Machine
+
+<a name="requirements"></a>
+## A. Requirements
+
+To try out this app, first we're assuming that the tester has the following installed on their computers:
+- NPM/Node.js (version 8+ of Node is being used)
+- MongoDB
+- Chrome (preferentially), any browser based on recent versions of Chromium or Firefox
+- Git
+- Development-friendly text editor such as Sublime, Atom, Visual Studio Code, etc.
+
+We're also assuming that the tester is knowledgeable in the use of NPM, MongoDB and Git.
+
+[Top](#toc)
+
+<a name="setup"></a>
+## B. Installing and Set Up
+
+Git clone this project or fork it to the local machine. Then do:
+
+```npm install```
+
+Check what the public TCP/IP of the local machine is and be sure to update the url's in the following files:
+- public/sw.js (dashboardURLs)
+- public/api-res.js (bAddress)
+- public/scripts/lists/lists.js (const stocket = io(etc))
+
+Note that that public TCP/IP is what should be used to connect to the running app on the phone.
+
+Be sure that MongoDB is running before trying to start the server.
+
+To run the server, type either:
+
+```node ./index.js```
+
+or
+
+```npm run start```
+
+Once connection to the database is confirmed, there should also be a message saying that the server is listening.
+
+Visit https://localhost:3000 to hit the index page.
