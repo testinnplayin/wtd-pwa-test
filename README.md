@@ -202,7 +202,7 @@ Check what the public TCP/IP of the local machine is and be sure to update the u
 - public/api-res.js (bAddress)
 - public/scripts/lists/lists.js (const stocket = io(etc))
 
-Note that that public TCP/IP is what should be used to connect to the running app on the phone.
+Note that that public TCP/IP is what should be used to connect to the running app on the phone. Also note that what was not cloned in this project is a config.js file that contains the database URL and the server port. Be sure to put those in a separate file called config.js and then update the root/index.js server file.
 
 In order to set up the HTTPS, please following this doc:
 
@@ -222,6 +222,6 @@ or
 
 Once connection to the database is confirmed, there should also be a message saying that the server is listening.
 
-Visit https://localhost:3000 to hit the index page if on the local machine. If not, visit the page at the public TCP/IP address mentioned above on the phone, assuming the phone is on the same internet box/router. This has not been set up for using a phone on a cellular network.
+On the local machine, visit https://localhost:{port} where {port} is whatever port the tester has chosen to put his server on. If not, visit the page at the public TCP/IP address mentioned above on the phone, assuming the phone is on the same internet box/router. This has not been set up for using a phone on a cellular network.
 
 [Top](Toc)
