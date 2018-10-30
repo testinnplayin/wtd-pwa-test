@@ -1,9 +1,12 @@
-import {pReqOpts, resources} from '../../api-res.js';
+import {
+    dReqOpts,
+    pReqOpts,
+    resources
+} from '../../api-res.js';
 
 'use strict';
-
+const endpnt = `${resources.bAddress}/api/${resources.u}`;
 function createUser(userObj) {
-    const endpnt = `${resources.bAddress}/api/${resources.u}`;
     let postObj = pReqOpts;
     postObj.body = JSON.stringify(userObj);
     const postReq = new Request(endpnt, postObj);
@@ -11,10 +14,30 @@ function createUser(userObj) {
     fetch(postReq)
         .then(response => {
             console.log('response ', response);
+            // this is a mock user look up since we don't actually have a user log in system in place
+            localStorage.setItem('userId', userObj.user_id);
+            console.log(localStorage);
+            changeRenderingOfSubStatus(true);
         })
         .catch(err => {
             console.error(`Oops : ${err}`);
         })
+}
+
+function deleteUser(userId) {
+    let delEpnt = endpnt + '/' + userId,
+        delReq = new Request(delEpnt, dReqOpts);
+
+    fetch(delReq)
+        .then(response => {
+            if (!response.ok) throw new Error(response.statusText);
+            return response;
+        })
+        .then(res => {
+            console.info(`Deletion of user ${userId} successful`);
+            changeRenderingOfSubStatus(false);
+        })
+        .catch(err => console.error(`Error deleting user ${userId}: ${err}`));
 }
 
 function subscribeUser() {
@@ -30,10 +53,12 @@ function subscribeUser() {
                 userVisibleOnly : true // makes sure user always sees push notifications that arrive
             })
                 .then(subscription => {
-                    toast('Subscribed successfully');
+                    alert('Subscribed successfully');
                     console.info('Push notification subscribed');
-                    console.log('subscription');
-                    changeRenderingOfSubStatus(true);
+                    console.log('subscription ', subscription);
+                    let userIdArr = subscription.endpoint.split('/');
+                    const userId = userIdArr[userIdArr.length - 1];
+                    createUser({ user_id : userId });
                 })
                 .catch(err2 => {
                     console.error(`Error subscribing user: ${err2}`);
@@ -54,10 +79,11 @@ function unsubscribeUser() {
                     
                     subscription.unsubscribe()
                         .then(() => {
-                            toast('Successfully unsubscribed');
+                            alert('Successfully unsubscribed');
                             console.info('Successfully unsubscribed from push notifications');
                             console.log('subscription post drop ', subscription);
-                            changeRenderingOfSubStatus(true);
+                            const userId = localStorage.getItem('userId');
+                            deleteUser(userId);
                         })
                         .catch(err3 => {
                             console.error(`Error with unsubscribing user: ${err3}`);

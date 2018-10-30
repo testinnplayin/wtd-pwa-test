@@ -15,6 +15,7 @@ export const resources = {
     u : 'users'
 };
 
+export const dReqOpts = { method : 'DELETE', mode : 'cors' };
 export const gReqOpts = { method : 'GET', mode : 'cors' };
 export const pReqOpts = {
     method : 'POST',

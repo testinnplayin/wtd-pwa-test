@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
     user_id : {
-        type : mongoose.Schema.Types.Mixed,
+        type : String,
         required : true,
         unique : true,
         dropDups : true
