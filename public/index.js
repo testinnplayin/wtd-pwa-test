@@ -1,11 +1,5 @@
-const config = {
-    apiKey: "AIzaSyAdMVmXVOvtiplT8YXB0-jwtdgTKtTFuWg",
-    authDomain: "thingamabobs-95715.firebaseapp.com",
-    databaseURL: "https://thingamabobs-95715.firebaseio.com",
-    projectId: "thingamabobs-95715",
-    storageBucket: "thingamabobs-95715.appspot.com",
-    messagingSenderId: "370014858199"
-};
+import backend from '/back-end-conf.js';
+const config = backend.firebase.config;
 firebase.initializeApp(config);
 
 import {
