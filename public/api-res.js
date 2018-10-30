@@ -11,10 +11,18 @@ export const resources = {
         wEle : 'whatchamagiggers'
     },
     c : 'count',
-    t : 'table'
+    t : 'table',
+    u : 'users'
 };
 
 export const gReqOpts = { method : 'GET', mode : 'cors' };
+export const pReqOpts = {
+    method : 'POST',
+    mode : 'cors',
+    headers : {
+        'Content-Type' : 'application/json'
+    }
+};
 export let uReqOpts = {
     method : 'PUT',
     mode : 'cors',
