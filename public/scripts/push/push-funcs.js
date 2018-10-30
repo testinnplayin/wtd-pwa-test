@@ -1,6 +1,61 @@
 (function(window) {
     'use strict';
 
+    function subscribeUser() {
+        console.log('subscribeUser');
+        navigator.serviceWorker.ready
+            .then(registration => {
+                if (!registration.pushManager) {
+                    console.warn('Browser does not support push notifications');
+                    return false;
+                }
+
+                registration.pushManager.subscribe({
+                    userVisibleOnly : true // makes sure user always sees push notifications that arrive
+                })
+                    .then(subscription => {
+                        toast('Subscribed successfully');
+                        console.info('Push notification subscribed');
+                        console.log('subscription');
+                        changeRenderingOfSubStatus(true);
+                    })
+                    .catch(err2 => {
+                        console.error(`Error subscribing user: ${err2}`);
+                    });
+            })
+            .catch(err => {
+                console.error(`Service worker is not ready: ${err}`);
+            });
+    }
+
+    function unsubscribeUser() {
+        console.log('unsubscribeUser');
+        navigator.serviceWorker.ready
+            .then(registration => {
+                registration.pushManager.getSubscription()
+                    .then(subscription => {
+                        if (!subscription) throw new Error('cannot find subscription');
+                        
+                        subscription.unsubscribe()
+                            .then(() => {
+                                toast('Successfully unsubscribed');
+                                console.info('Successfully unsubscribed from push notifications');
+                                console.log('subscription post drop ', subscription);
+                                changeRenderingOfSubStatus(true);
+                            })
+                            .catch(err3 => {
+                                console.error(`Error with unsubscribing user: ${err3}`);
+                            });
+                    })
+                    .catch(err2 => {
+                        console.error(`Error with push manager and subscription: ${err2}`);
+                    });
+            })
+            .catch(err => {
+                console.error(`Service worker is not ready: ${err}`);
+            });
+    }
+
     function checkForSupport() {
         if (!('PushManager' in window)) {
             console.warn('Push notifications are not supported in this browser');
@@ -28,18 +83,9 @@
         }
     }
 
-    function subscribeUser() {
-        console.log('subscribeUser');
-    }
-
-    function unsubscribeUser() {
-        console.log('unsubscribeUser');
-    }
-
     function setUpPushBtn() {
         document.querySelector('.push-note-btn').addEventListener('click', e => {
             if (e.currentTarget.classList.contains('not-subbed')) {
-                changeRenderingOfSubStatus(true);
                 subscribeUser();
             } else {
                 changeRenderingOfSubStatus(false);
