@@ -65,6 +65,7 @@ const {activateDohicky} = require('./events/dohicky-events');
 const dashboardRouter = require('./routes/dashboard-router');
 const dohickyRouter = require('./routes/dohicky-router');
 const thingamabobRouter = require('./routes/thingamabob-router');
+const userRouter = require('./routes/user-router');
 const whatchamagiggerRouter = require('./routes/whatchamagigger-router');
 
 app.use(morgan('common'));
@@ -74,6 +75,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/dohickies', dohickyRouter);
 app.use('/api/thingamabobs', thingamabobRouter);
+app.use('/api/users', userRouter);
 app.use('/api/whatchamagiggers', whatchamagiggerRouter);
 
 // HOME at index
