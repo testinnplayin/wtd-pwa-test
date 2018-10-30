@@ -1,7 +1,9 @@
 'use strict';
 
+import backendInfo from './back-end-conf.js';
+
 export const resources = {
-    bAddress : 'https://192.168.1.46:3000',
+    bAddress : `https://${backendInfo.tcpIp}:${backendInfo.port}`,
     api : 'api/dashboard',
     elements : {
         dEle : 'dohickies',
