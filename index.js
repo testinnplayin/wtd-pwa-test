@@ -14,6 +14,13 @@ const https_options = {
 
 const https = require('https').Server(https_options, app);
 
+// const admin = require('firebase-admin');
+// const serviceAccount = require('./thingamabobs-95715-firebase-adminsdk-69w92-99e8cdb405.json');
+const firebase = require('firebase');
+// admin.initializeApp({
+//     credential : admin.credential.cert(serviceAccount),
+//     databaseURL : "https://thingamabobs-95715.firebaseio.com"
+// });
 
 const cors = require('cors');
 const arrOrigins = [
@@ -49,7 +56,9 @@ const morgan = require('morgan');
 
 const io = require('socket.io')(https);
 
-const {dbURL, port} = require('./config');
+const {dbURL, fConfig, port} = require('./config');
+const config = fConfig.config;
+firebase.initializeApp(config);
 
 const {activateDohicky} = require('./events/dohicky-events');
 

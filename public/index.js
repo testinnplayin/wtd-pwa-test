@@ -1,6 +1,6 @@
-import backend from '/back-end-conf.js';
-const config = backend.firebase.config;
-firebase.initializeApp(config);
+// import backend from '/back-end-conf.js';
+// const config = backend.firebase.config;
+// firebase.initializeApp(config);
 
 import {
     gReqOpts,
