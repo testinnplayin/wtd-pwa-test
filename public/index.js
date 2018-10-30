@@ -393,20 +393,20 @@ function getStuffOutOfCache() {
     }
 }
 
-function askForNotifPermission(registration) {
-    Notification.requestPermission(status => {
-        console.log('Notification permission status ', status);
+// function askForNotifPermission(registration) {
+//     Notification.requestPermission(status => {
+//         console.log('Notification permission status ', status);
 
-        if (status === 'granted') {
-            const options = {
-                body : 'You are now subscribed to notifications!',
-                vibrate : [300, 100, 400]
-            };
+//         if (status === 'granted') {
+//             const options = {
+//                 body : 'You are now subscribed to notifications!',
+//                 vibrate : [300, 100, 400]
+//             };
             
-            registration.showNotification('Subscription to notifications', options);
-        }
-    });
-}
+//             registration.showNotification('Subscription to notifications', options);
+//         }
+//     });
+// }
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations()
@@ -423,7 +423,7 @@ if ('serviceWorker' in navigator) {
                         // NOTE: deactivate the caches conditional and run the caches code outside and below if need to update the service worker
                         
                         getStuffOutOfCache();
-                        askForNotifPermission(registration);
+                        // askForNotifPermission(registration);
                     })
                     .catch(err => console.error(`[Service Worker] registration error: ${err}`));
             } else {

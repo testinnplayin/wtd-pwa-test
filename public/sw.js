@@ -33,7 +33,7 @@ self.addEventListener('install', function(e) {
     e.waitUntil(
         caches.open(dashboardCacheName + '-v' + version.toString())
             .then(function(cache) {
-                console.log('[Service Worker] caching app shell');
+                // console.log('[Service Worker] caching app shell');
                 return cache.addAll(filesToCache);
             })
     );
@@ -57,16 +57,15 @@ self.addEventListener('activate', function(e) {
 });
 
 self.addEventListener('fetch', function(e) {
-    console.log('[Service Worker] fetching ', e.request.url);
+    // console.log('[Service Worker] fetching ', e.request.url);
     // if it is a dashboard request then run this code
     if (dashboardURLs.indexOf(e.request.url) > - 1) {
-        console.log('[Service Worker] ' + e.request.url + 'dashboard request exists in cache');
+        // console.log('[Service Worker] ' + e.request.url + 'dashboard request exists in cache');
         e.respondWith(
             caches.open(dashboardCacheName + '-v' + version.toString())
                 .then(function(cache) {
                     return fetch(e.request)
                         .then(function(response) {
-                            console.log('response inside requests ', response);
                             cache.put(e.request.url, response.clone());
     
                             return response;
@@ -76,7 +75,7 @@ self.addEventListener('fetch', function(e) {
         );
     } else if (dashboardURLs.indexOf(e.request.url) < 0) {
         // if it isn't a dashboard request, then run this code
-        console.log('[Service Worker] ' + e.request.url + ' non dashboard request cache');
+        // console.log('[Service Worker] ' + e.request.url + ' non dashboard request cache');
         
         // the list.html file is not directly linked so if the sw does a localhost:3000/list/thingamabobs it returns an error
         // the first block of code runs when the fetch request is NOT directed at list
