@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
         required : true,
         unique : true,
         dropDups : true
-    }
+    },
+    token : String
 });
 
 const User = mongoose.model('User', userSchema);

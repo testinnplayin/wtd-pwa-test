@@ -4,8 +4,61 @@ import {
     resources
 } from '../../api-res.js';
 
+import bConfig from '../../back-end-conf.js';
+
 'use strict';
+
 const endpnt = `${resources.bAddress}/api/${resources.u}`;
+firebase.initializeApp(bConfig.firebase.config);
+
+const messaging = firebase.messaging();
+messaging.usePublicVapidKey(bConfig.firebase.FCM_PUBLIC_KEY);
+
+
+function sendTokenToServer(cToken, user) {
+    let uEndpnt = `${endpnt}/token`,
+        reqOpts = { method : 'PUT', mode : 'cors', headers : { 'Content-Type' : 'application/json' } };
+    user.token = cToken;
+    reqOpts.body = JSON.stringify(user);
+    const uReq = new Request(uEndpnt, reqOpts);
+
+    fetch(uReq)
+        .then(response => {
+            console.log('response ', response);
+        })
+        .catch(err => console.error(err));
+}
+
+function dealWToken(user) {
+    messaging.getToken()
+        .then(currentToken => {
+            if (currentToken) {
+                console.log('retrieve old token ', currentToken);
+                sendTokenToServer(currentToken, user);
+                changeRenderingOfSubStatus(true);
+            } else {
+                console.log('Generate new token');
+                changeRenderingOfSubStatus(true);
+                setTokenSentToServer(false);
+            }
+        })
+        .catch(err => {
+            console.error('Error while retrieving token: ', err);
+            setTokenSentToServer(false);
+        });
+}
+
+messaging.onTokenRefresh(() => {
+    messaging.getToken().then(refreshedToken => {
+        console.log('Token refreshed');
+        setTokenSentToServer(false);
+        sendTokenToServer(refreshedToken);
+    })
+    .catch(err => {
+        console.error('Error retrieving fresh token ', err);
+    });
+});
+
 function createUser(userObj) {
     let postObj = pReqOpts;
     postObj.body = JSON.stringify(userObj);
@@ -14,11 +67,14 @@ function createUser(userObj) {
     fetch(postReq)
         .then(response => {
             console.log('response ', response);
+            if (!response.ok) throw new Error(response.statusText);
             // this is a mock user look up since we don't actually have a user log in system in place
             localStorage.setItem('userId', userObj.user_id);
             console.log(localStorage);
-            changeRenderingOfSubStatus(true);
+            return response;
         })
+        .then(res => res.json())
+        .then(data => dealWToken(data.user))
         .catch(err => {
             console.error(`Oops : ${err}`);
         })
@@ -49,20 +105,27 @@ function subscribeUser() {
                 return false;
             }
 
-            registration.pushManager.subscribe({
-                userVisibleOnly : true // makes sure user always sees push notifications that arrive
-            })
-                .then(subscription => {
-                    alert('Subscribed successfully');
-                    console.info('Push notification subscribed');
-                    console.log('subscription ', subscription);
-                    let userIdArr = subscription.endpoint.split('/');
-                    const userId = userIdArr[userIdArr.length - 1];
-                    createUser({ user_id : userId });
+            messaging.requestPermission()
+                .then(() => {
+                    registration.pushManager.subscribe({
+                        userVisibleOnly : true // makes sure user always sees push notifications that arrive
+                    })
+                        .then(subscription => {
+                            alert('Subscribed successfully');
+                            console.info('Push notification subscribed');
+                            console.log('subscription ', subscription);
+                            let userIdArr = subscription.endpoint.split('/');
+                            const userId = userIdArr[userIdArr.length - 1];
+                            
+                            createUser({ user_id : userId });
+                        })
+                        .catch(err2 => {
+                            console.error(`Error subscribing user: ${err2}`);
+                        });
                 })
-                .catch(err2 => {
-                    console.error(`Error subscribing user: ${err2}`);
-                });
+                .catch(err => {
+                    console.error('Oops! ', err);
+                })
         })
         .catch(err => {
             console.error(`Service worker is not ready: ${err}`);
