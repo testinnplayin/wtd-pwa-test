@@ -54,13 +54,13 @@ mongoose.Promise = global.Promise;
 
 const morgan = require('morgan');
 
-const io = require('socket.io')(https);
+// const io = require('socket.io')(https);
 
 const {dbURL, fConfig, port} = require('./config');
 const config = fConfig.config;
 firebase.initializeApp(config);
 
-const {activateDohicky} = require('./events/dohicky-events');
+// const {activateDohicky} = require('./events/dohicky-events');
 
 const dashboardRouter = require('./routes/dashboard-router');
 const dohickyRouter = require('./routes/dohicky-router');
@@ -108,13 +108,13 @@ mongoose.connect(dbURL, { useNewUrlParser : true })
     })
     .catch(err => console.error(`---- Error connecting to database : ${err} ----`));
 
-io.on('connection', function(socket) {
-    console.log('Client has connected to socket ', socket.id);
-    // console.log('sockets opened ', io.sockets.sockets);
+// io.on('connection', function(socket) {
+//     console.log('Client has connected to socket ', socket.id);
+//     // console.log('sockets opened ', io.sockets.sockets);
 
-    activateDohicky(socket);
+//     activateDohicky(socket);
 
-    socket.on('disconnect', function() {
-        console.log('Client has disconnected ', socket.id);
-    })
-});
+//     socket.on('disconnect', function() {
+//         console.log('Client has disconnected ', socket.id);
+//     })
+// });

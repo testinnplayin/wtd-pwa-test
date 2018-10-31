@@ -3,7 +3,7 @@ import {viewTitles} from '../constants/lists.js';
 import renderers from '../helpers/renderers.js';
 import listeners from '../helpers/events.js';
 
-const socket = io('https://192.168.1.46:3000');
+// const socket = io('https://192.168.1.46:3000');
 
 'use strict';
 
@@ -75,9 +75,27 @@ function fetchResources(str) {
 }
 
 function activateDohicky() {
-    const uDoh = state.dohicky;
     console.log('ACTIVATE_DOHICKY');
-    socket.emit('ACTIVATE_DOHICKY', uDoh);
+    const uDoh = state.dohicky;
+    let uEndpnt = `${resources.bAddress}/api/${resources.elements.dEle}/${uDoh._id}`,
+        updateObj = uReqOpts;
+    updateObj.body = JSON.stringify(uDoh);
+    const updateReq = new Request(uEndpnt, updateObj);
+    fetch(updateReq)
+        .then(response => {
+            if (!response.ok) throw new Error(`cannot update dohicky of id ${uDoh._id}`);
+            return response;
+        })
+        .then(res => res.json())
+        .then(data => {
+            state.dohicky = data.dohicky;
+            state.dMsg = `Successful update of dohicky ${uDoh._id}`;
+        })
+        .catch(err => {
+            console.error(`Error updating dohicky ${uDoh._id}: ${err}`);
+            state.dMsg = `Error updating dohicky ${uDoh._id}`;
+        });
+    // socket.emit('ACTIVATE_DOHICKY', uDoh);
 }
 
 
@@ -125,20 +143,20 @@ function createClickListener(eleId) {
     });
 }
 
-function activateDohSucc() {
-    socket.on('ACTIVATE_DOH_SUCCESS', response => {
-        console.log('Dohicky activated! ', response);
-        const p = document.createElement('p');
-        document.querySelector('.play-btn-div').appendChild(p);
-        p.textContent = `Dohicky ${response._id} is now active!`;
-    });
-}
+// function activateDohSucc() {
+//     socket.on('ACTIVATE_DOH_SUCCESS', response => {
+//         console.log('Dohicky activated! ', response);
+//         const p = document.createElement('p');
+//         document.querySelector('.play-btn-div').appendChild(p);
+//         p.textContent = `Dohicky ${response._id} is now active!`;
+//     });
+// }
 
-function activateDohError() {
-    socket.on('ACTIVATE_DOH_ERROR', err => {
-        console.error('Error activating dohicky! ', err);
-    });
-}
+// function activateDohError() {
+//     socket.on('ACTIVATE_DOH_ERROR', err => {
+//         console.error('Error activating dohicky! ', err);
+//     });
+// }
 
 
 
@@ -252,8 +270,8 @@ function setUpInitFetch() {
 }
 
 function setUpList() {
-    activateDohSucc();
-    activateDohError();
+    // activateDohSucc();
+    // activateDohError();
     listeners.listenForWhat(socket);
     setUpH1();
     // Thingamabob-specific set up

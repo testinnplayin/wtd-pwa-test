@@ -14,7 +14,6 @@ const { get404, get500 } = require('../src/handlers/error-handlers');
 const { get204, getSuccess } = require('../src/handlers/success-handlers');
 
 router.post('/', jsonParser, (req, res) => {
-    console.log('USER POST ', req.body);
     User
         .create(req.body)
         .then(() => res.status(201).end())
@@ -22,7 +21,6 @@ router.post('/', jsonParser, (req, res) => {
 });
 
 router.delete('/:userId', (req, res) => {
-    console.log('USER DELETE ', req.params.userId);
     User
         .findOneAndRemove({ user_id : req.params.userId })
         .then(r => {
