@@ -254,7 +254,7 @@ function readyPMs() {
     }
 }
 
-if (!window.location.href.includes('dohickies')) {
+if (!window.location.href.includes('list')) {
     setUpPushBtn()
     readyPMs();
 }

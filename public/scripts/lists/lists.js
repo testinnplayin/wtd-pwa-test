@@ -14,6 +14,8 @@ if (browserLoc.includes('thingamabobs')) {
     endpnt += resources.elements.tEle;
 } else if (browserLoc.includes('dohickies')){
     endpnt += resources.elements.dEle;
+} else {
+    endpnt += resources.elements.wEle;
 }
 
 // state object
@@ -266,6 +268,8 @@ function setUpInitFetch() {
         fetchResources('thingamabobs');
     } else if (browserLoc.includes('dohickies')) {
         fetchResources('dohickies');
+    } else {
+        fetchResources('whatchamagiggers');
     }
 }
 
