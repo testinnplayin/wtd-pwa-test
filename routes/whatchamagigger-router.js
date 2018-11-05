@@ -11,7 +11,7 @@ const {
 } = require('../src/handlers/error-handlers');
 
 const {
-    get200
+    getSuccess
 } = require('../src/handlers/success-handlers');
 
 router.get('/', (req, res) => {
@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
                 return get404(res, 'whatchamagiggers');
             }
             
-            return get200(res, whats, 'whatchamagiggers');
+            return getSuccess(res, whats, 'whatchamagiggers', 200);
         })
         .catch(err => get500(res, err, `cannot fetch whatchamagiggers`));
 });
@@ -37,7 +37,7 @@ router.get('/:id', (req, res) => {
                 return get404(res, `whatchamagigger of id ${req.params.id}`);
             }
 
-            return get200(res, what, 'whatchamagigger');
+            return getSuccess(res, what, 'whatchamagigger', 200);
         })
         .catch(err => get500(res, err, `cannot fetch whatchamagigger of id ${req.params.id}`));
 });

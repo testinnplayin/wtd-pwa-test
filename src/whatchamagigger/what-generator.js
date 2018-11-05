@@ -29,6 +29,7 @@ function createWhat(newWhat, socket) {
         .catch(err => console.error(`Error: creating whatchamagigger: ${err}`));
 }
 
+// NOTE: not used yet (if ever)
 function generateGoogleToken () {
     return new Promise((resolve, reject) => {
         const oauthStuff = new google.auth.OAuth2(
@@ -66,6 +67,7 @@ function triggerWhatCreation(doh) {
                     if (!users) {
                         console.error('Error: cannot find users ', err);
                     }
+
                     users.forEach(user => {
                         let reqBody = {
                             notification : {

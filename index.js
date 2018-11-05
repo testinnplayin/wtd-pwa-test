@@ -93,6 +93,12 @@ app.get('/list/thingamabobs', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/views/list.html'));
 });
 
+// whatchamagiggers view
+
+app.get('/list/whatchamagiggers', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/views/list.html'));
+});
+
 app.use('*', (req, res) => {
     return res.status(404).json({ message : 'Path not found' });
 });
