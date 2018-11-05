@@ -57,8 +57,8 @@ const morgan = require('morgan');
 // const io = require('socket.io')(https);
 
 const {dbURL, fConfig, port} = require('./config');
-const config = fConfig.config;
-firebase.initializeApp(config);
+// const config = fConfig.config;
+// firebase.initializeApp(config);
 
 // const {activateDohicky} = require('./events/dohicky-events');
 

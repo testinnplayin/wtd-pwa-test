@@ -1,8 +1,18 @@
+const firebase = require('firebase-admin');
+const { google } = require('googleapis');
 'use strict';
 
 const mongoose = require('mongoose');
 
-const {Whatchamagigger} = require('../models/whatchamagigger');
+const { User } = require('../models/user');
+const { Whatchamagigger } = require('../models/whatchamagigger');
+const key = require('../../thingamabobs-95715-firebase-adminsdk-69w92-99e8cdb405.json');
+const { CLIENT_SECRET, OUTSIDE_ADDRESS, port } = require('../../config');
+
+firebase.initializeApp({
+    credential : firebase.credential.cert(key),
+    databaseURL : "https://thingamabobs-95715.firebaseio.com"
+});
 
 let timeout;
 
@@ -14,12 +24,31 @@ function createWhat(newWhat, socket) {
         .create(newWhat)
         .then(wat => {
             console.log('---- Whatchamagigger created ----');
-            socket.emit('WHAT_CREATED', wat);
+            // socket.emit('WHAT_CREATED', wat);
         })
         .catch(err => console.error(`Error: creating whatchamagigger: ${err}`));
 }
 
-function triggerWhatCreation(doh, socket) {
+function generateGoogleToken () {
+    return new Promise((resolve, reject) => {
+        const oauthStuff = new google.auth.OAuth2(
+            key.client_email,
+            CLIENT_SECRET,
+            `https://${OUTSIDE_ADDRESS}:${port}/` // start back up from here
+        );
+
+        oauthStuff.autorize((err, tokens) => {
+            if (err) {
+                console.error('Problem with JWT authorization: ' + err);
+                reject(err);
+                return;
+            }
+            resolve(tokens.access_token);
+        });
+    });
+}
+
+function triggerWhatCreation(doh) {
     const newWhat = {
         is_ok : true,
         thingamabob_msg : doh.thingamabob_bp.awesome_field,
@@ -30,12 +59,31 @@ function triggerWhatCreation(doh, socket) {
         .create(newWhat)
         .then(wat => {
             console.log('---- Whatchamagigger created, loop triggered ----');
-            socket.emit('WHAT_CREATED', wat);
-            triggerLoop(newWhat, socket);
+            User
+                .find()
+                .exec()
+                .then(users => {
+                    if (!users) {
+                        console.error('Error: cannot find users ', err);
+                    }
+                    users.forEach(user => {
+                        let reqBody = {
+                            notification : {
+                                body : wat.thingamabob_msg,
+                                title : 'New whatchamagigger!'
+                            },
+                            token : user.token
+                        };
+
+                        firebase.messaging().send(reqBody)
+                            .then(res => console.log('successful message sent ', res))
+                            .catch(err => console.error(`Error sending message: ${err}`));
+                    });
+                })
+                .catch(err => console.error('Error: cannot fetch users: ', err));
+            // triggerLoop(newWhat);
         })
         .catch(err => console.error(`Error: creating whatchamagigger: ${err}`));
-
-    // timeout = triggerLoop(newWhat);
 }
 
 function triggerLoop(newWhat, socket) {

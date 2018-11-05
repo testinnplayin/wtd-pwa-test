@@ -12,6 +12,11 @@ const userSchema = new mongoose.Schema({
     token : String
 });
 
+userSchema.methods.partialRep = {
+    _id : this._id,
+    user_id : this.user_id
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = {User};
