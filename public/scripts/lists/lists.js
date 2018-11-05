@@ -145,21 +145,6 @@ function createClickListener(eleId) {
     });
 }
 
-// function activateDohSucc() {
-//     socket.on('ACTIVATE_DOH_SUCCESS', response => {
-//         console.log('Dohicky activated! ', response);
-//         const p = document.createElement('p');
-//         document.querySelector('.play-btn-div').appendChild(p);
-//         p.textContent = `Dohicky ${response._id} is now active!`;
-//     });
-// }
-
-// function activateDohError() {
-//     socket.on('ACTIVATE_DOH_ERROR', err => {
-//         console.error('Error activating dohicky! ', err);
-//     });
-// }
-
 
 
 // RENDER functions
@@ -215,7 +200,7 @@ function renderList(str) {
 
     if (browserLoc.includes('dohickies')) {
         rawData.forEach((dohicky, i) => {
-            let li = renderers.renderListEle(dohicky, i, '.t-list');
+            renderers.renderListEle(dohicky, i, '.t-list');
             let btn = document.getElementById(dohicky._id);
             if (dohicky.thingamabob_id) {
                 btn.textContent = dohicky.thingamabob_id.awesome_field;
@@ -226,11 +211,18 @@ function renderList(str) {
         });
     } else if (browserLoc.includes('thingamabobs')) {
         rawData.forEach((thingamabob, i) => {
-            let li = renderers.renderListEle(thingamabob, i, '.t-list');
+            renderers.renderListEle(thingamabob, i, '.t-list');
             let btn = document.getElementById(thingamabob._id);
             btn.textContent = thingamabob.awesome_field;
             createClickListener(thingamabob._id);
          });
+    } else {
+        rawData.forEach((what, i) => {
+            renderers.renderListEle(what, i , '.t-list');
+            let btn = document.getElementById(what._id);
+            btn.textContent = what.thingamabob_msg;
+            createClickListener(what._id);
+        });
     }
 }
 
@@ -274,9 +266,6 @@ function setUpInitFetch() {
 }
 
 function setUpList() {
-    // activateDohSucc();
-    // activateDohError();
-    // listeners.listenForWhat(socket);
     setUpH1();
     // Thingamabob-specific set up
     setUpH3();
