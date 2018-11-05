@@ -140,6 +140,8 @@ function createClickListener(eleId) {
                 fetchResource('dohicky', eId);
             } else if (browserLoc.includes('thingamabobs')) {
                 fetchResource('thingamabob', eId);
+            } else {
+                fetchResource('whatchamagigger', eId);
             }
         }
     });
@@ -182,13 +184,15 @@ function renderTItemModal(resource, str) {
 
     if (str === 'thingamabob') {
         h2.textContent = resource.awesome_field;
-    } else {
+    } else if (str === 'dohicky') {
         if (resource.thingamabob_id) {
             h2.textContent = `Dohicky of thingamabob ${resource.thingamabob_id.awesome_field}`;
             renderPlayBtn(resource);
         } else {
             h2.textContent = `Dohicky of deleted thingamabob ${resource.thingamabob_bp.awesome_field}`;
         }
+    } else {
+        h2.textContent = `Whatchamagigger of thingamabob ${resource.thingamabob_msg}: ${resource._id}`;
     }
 
     h2.classList.add('t-m-title');
@@ -209,7 +213,9 @@ function renderList(str) {
             }
             createClickListener(dohicky._id);
         });
-    } else if (browserLoc.includes('thingamabobs')) {
+    } 
+    // refactor following
+    else if (browserLoc.includes('thingamabobs')) {
         rawData.forEach((thingamabob, i) => {
             renderers.renderListEle(thingamabob, i, '.t-list');
             let btn = document.getElementById(thingamabob._id);
