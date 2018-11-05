@@ -72,6 +72,20 @@ function triggerWhatCreation(doh) {
                                 body : wat.thingamabob_msg,
                                 title : 'New whatchamagigger!'
                             },
+                            android : {
+                                ttl : 60000,
+                                priority : 'high',
+                                notification : {
+                                    body : wat.thingamabob_msg,
+                                    title : 'New whatchamagigger!'
+                                }
+                            },
+                            webpush : {
+                                notification : {
+                                    title : 'New whatchamagigger!',
+                                    body : wat.thingamabob_msg
+                                }
+                            },
                             token : user.token
                         };
 
