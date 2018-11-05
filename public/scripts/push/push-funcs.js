@@ -6,6 +6,8 @@ import {
 
 import bConfig from '../../back-end-conf.js';
 
+const pushState = {};
+
 'use strict';
 
 const endpnt = `${resources.bAddress}/api/${resources.u}`;
@@ -32,14 +34,22 @@ function sendTokenToServer(cToken, user) {
 function dealWToken(user) {
     messaging.getToken()
         .then(currentToken => {
+            console.log('currentToken ', currentToken);
             if (currentToken) {
                 console.log('retrieve old token ', currentToken);
+                user.token = currentToken;
+                pushState.user = user;
                 sendTokenToServer(currentToken, user);
                 changeRenderingOfSubStatus(true);
             } else {
                 console.log('Generate new token');
-                changeRenderingOfSubStatus(true);
-                setTokenSentToServer(false);
+                // TODO: write code here for retrieving new token and then sending to server
+                // sendTokenToServer()
+                changeRenderingOfSubStatus(false);
+
+                // setTokenSentToServer(false);
+                const userId = localStorage.getItem('userId');
+
             }
         })
         .catch(err => {
@@ -49,14 +59,22 @@ function dealWToken(user) {
 }
 
 messaging.onTokenRefresh(() => {
+    console.log('token refreshed')
     messaging.getToken().then(refreshedToken => {
         console.log('Token refreshed');
-        setTokenSentToServer(false);
-        sendTokenToServer(refreshedToken);
+        // setTokenSentToServer(false);
+        if (pushState.user) {
+            pushState.user.token = refreshedToken;
+        }
+        sendTokenToServer(refreshedToken, { userId : localStorage.getItem('userId') });
     })
     .catch(err => {
         console.error('Error retrieving fresh token ', err);
     });
+});
+
+messaging.onMessage(payload => {
+    console.log('Message received ', payload);
 });
 
 function createUser(userObj) {
@@ -80,6 +98,12 @@ function createUser(userObj) {
         })
 }
 
+function deleteToken(user) {
+    messaging.deleteToken(user.token)
+        .then(() => console.log('Token is successfully deleted'))
+        .catch(err => console.error(`Error deleting token : ${err}`));
+}
+
 function deleteUser(userId) {
     let delEpnt = endpnt + '/' + userId,
         delReq = new Request(delEpnt, dReqOpts);
@@ -91,6 +115,10 @@ function deleteUser(userId) {
         })
         .then(res => {
             console.info(`Deletion of user ${userId} successful`);
+            console.log('pushState ', pushState);
+            if (pushState.user && pushState.user.token) {
+                deleteToken(pushState.user);
+            }
             changeRenderingOfSubStatus(false);
         })
         .catch(err => console.error(`Error deleting user ${userId}: ${err}`));
@@ -146,6 +174,7 @@ function unsubscribeUser() {
                             console.info('Successfully unsubscribed from push notifications');
                             console.log('subscription post drop ', subscription);
                             const userId = localStorage.getItem('userId');
+                            localStorage.removeItem('userId');
                             deleteUser(userId);
                         })
                         .catch(err3 => {
@@ -224,5 +253,8 @@ function readyPMs() {
             });
     }
 }
-setUpPushBtn()
-readyPMs();
+
+if (!window.location.href.includes('dohickies')) {
+    setUpPushBtn()
+    readyPMs();
+}

@@ -1,7 +1,7 @@
 import { gReqOpts, resources, uReqOpts } from '../../api-res.js';
 import {viewTitles} from '../constants/lists.js';
 import renderers from '../helpers/renderers.js';
-import listeners from '../helpers/events.js';
+// import listeners from '../helpers/events.js';
 
 // const socket = io('https://192.168.1.46:3000');
 
@@ -272,7 +272,7 @@ function setUpInitFetch() {
 function setUpList() {
     // activateDohSucc();
     // activateDohError();
-    listeners.listenForWhat(socket);
+    // listeners.listenForWhat(socket);
     setUpH1();
     // Thingamabob-specific set up
     setUpH3();
