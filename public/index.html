@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#444444" />
     <title>Thingamabob App</title>
     <link rel="stylesheet" href="styles/normalize.css" />
     <link rel="stylesheet" href="styles/main.css" />
@@ -23,6 +25,7 @@
 
     <!-- Widget area -->
     <main class="main-area">
+        <noscript>Scripts are disabled, please enable scripts</noscript>
         <h1>Dashboard</h1>
         <section class="widget t-widget" id="thingamabobs">
             <h3>Thingamabobs</h3>
@@ -55,5 +58,7 @@
     <!-- Scripts -->
     <script src="/index.js" type="module"></script>
     <script src="/scripts/push/push-funcs.js" type="module"></script>
+    <script src="/api-res.js" type="module"></script>
+    <script src="/back-end-conf.js" type="module"></script>
 </body>
 </html>

@@ -19,7 +19,8 @@ const dashboardURLs = [
     '/styles/normalize.css',
     '/styles/main.css',
     '/styles/index.css',
-    '/styles/lists.css'
+    '/styles/lists.css',
+    '/manifest.json'
 ];
 
 let dashboardCacheName = 'dashboard-Cache',
