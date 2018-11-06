@@ -397,21 +397,6 @@ function getStuffOutOfCache() {
     }
 }
 
-// function askForNotifPermission(registration) {
-//     Notification.requestPermission(status => {
-//         console.log('Notification permission status ', status);
-
-//         if (status === 'granted') {
-//             const options = {
-//                 body : 'You are now subscribed to notifications!',
-//                 vibrate : [300, 100, 400]
-//             };
-            
-//             registration.showNotification('Subscription to notifications', options);
-//         }
-//     });
-// }
-
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations()
         .then(registrations => {
@@ -427,7 +412,6 @@ if ('serviceWorker' in navigator) {
                         // NOTE: deactivate the caches conditional and run the caches code outside and below if need to update the service worker
                         
                         getStuffOutOfCache();
-                        // askForNotifPermission(registration);
                     })
                     .catch(err => console.error(`[Service Worker] registration error: ${err}`));
             } else {
@@ -435,15 +419,10 @@ if ('serviceWorker' in navigator) {
             }
         })
         .catch(err => console.error('What registrations?'));
-
-    // NOTE: for development purposes, reactivate the following code when working on the service worker otherwise it won't install/update without having to close and clear the history of Chrome
-    // navigator.serviceWorker
-    //     .register('./sw.js')
-    //     .then(function(registration) {
-    //         console.log('[Service Worker] registered ', registration);
-            // getStuffOutOfCache();
-    //     })
-    //     .catch(err => console.error(`[Service Worker] registration error: ${err}`));
 } else {
     setUpStateNoSW();
 }
+
+window.addEventListener('beforeinstallprompt', e => {
+    console.log('install prompt triggered ', e);
+});

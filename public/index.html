@@ -4,17 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Test PWA" />
+    <link rel="manifest" href="manifest.json" />
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#444444" />
     <title>Thingamabob App</title>
     <link rel="stylesheet" href="styles/normalize.css" />
     <link rel="stylesheet" href="styles/main.css" />
     <link rel="stylesheet" href="/styles/index.css" />
-    <link rel="manifest" href="/manifest.json" />
     <script src="https://www.gstatic.com/firebasejs/5.5.6/firebase.js"></script>
     <!-- <script src="/socket.io/socket.io.js"></script> -->
 </head>
 <body>
+    <noscript>Scripts are disabled, please enable scripts</noscript>
     <!-- Navbar -->
     <nav>
         <li><a href="/">Home</a></li>
@@ -25,7 +27,6 @@
 
     <!-- Widget area -->
     <main class="main-area">
-        <noscript>Scripts are disabled, please enable scripts</noscript>
         <h1>Dashboard</h1>
         <section class="widget t-widget" id="thingamabobs">
             <h3>Thingamabobs</h3>
