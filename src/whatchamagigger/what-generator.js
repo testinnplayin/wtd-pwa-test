@@ -70,16 +70,21 @@ function triggerWhatCreation(doh) {
 
                     users.forEach(user => {
                         let reqBody = {
-                            notification : {
-                                body : wat.thingamabob_msg,
-                                title : 'New whatchamagigger!'
+                            data : {
+                                tMsg : wat.thingamabob_msg,
+                                title : 'New Whatchamagigger!'
                             },
+                            // notification : {
+                            //     body : wat.thingamabob_msg,
+                            //     title : 'New whatchamagigger!'
+                            // },
                             android : {
                                 ttl : 60000,
                                 priority : 'high',
                                 notification : {
                                     body : wat.thingamabob_msg,
                                     title : 'New whatchamagigger!'
+                                    // clickAction : `https://${OUTSIDE_ADDRESS}:${port}/list/whatchamagiggers`
                                 }
                             },
                             webpush : {

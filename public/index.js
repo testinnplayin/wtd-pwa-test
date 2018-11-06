@@ -1,6 +1,8 @@
 // import backend from '/back-end-conf.js';
 // const config = backend.firebase.config;
+// import firebase from 'firebase';
 // firebase.initializeApp(config);
+// const messaging = firebase.messaging();
 
 import {
     gReqOpts,
@@ -405,9 +407,10 @@ if ('serviceWorker' in navigator) {
             
             if (registrations.length === 0) {
                 navigator.serviceWorker
-                    .register('./sw.js')
+                    .register('./firebase-messaging.js')
                     .then(function(registration) {
                         console.log('[Service Worker] registered ', registration);
+                        // messaging.useServiceWorker(registration);
                         // This following code snippet runs when there is no service worker installed already
                         // NOTE: deactivate the caches conditional and run the caches code outside and below if need to update the service worker
                         
@@ -426,3 +429,4 @@ if ('serviceWorker' in navigator) {
 window.addEventListener('beforeinstallprompt', e => {
     console.log('install prompt triggered ', e);
 });
+
