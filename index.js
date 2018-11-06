@@ -2,6 +2,7 @@
 
 const express = require('express');
 const app = express();
+const httpApp = express();
 
 const path = require('path');
 const fs = require('fs');
@@ -13,14 +14,7 @@ const https_options = {
 };
 
 const https = require('https').Server(https_options, app);
-
-// const admin = require('firebase-admin');
-// const serviceAccount = require('./thingamabobs-95715-firebase-adminsdk-69w92-99e8cdb405.json');
-const firebase = require('firebase');
-// admin.initializeApp({
-//     credential : admin.credential.cert(serviceAccount),
-//     databaseURL : "https://thingamabobs-95715.firebaseio.com"
-// });
+const http = require('http').createServer(httpApp);
 
 const cors = require('cors');
 const arrOrigins = [
@@ -30,6 +24,7 @@ const arrOrigins = [
     "http://localhost:8081",
     'http://localhost:3000',
     'https://localhost:3000',
+    'http://localhost:3001',
     "localhost:8080",
     "*"
 ];
@@ -54,13 +49,7 @@ mongoose.Promise = global.Promise;
 
 const morgan = require('morgan');
 
-// const io = require('socket.io')(https);
-
-const {dbURL, fConfig, port} = require('./config');
-// const config = fConfig.config;
-// firebase.initializeApp(config);
-
-// const {activateDohicky} = require('./events/dohicky-events');
+const {dbURL, port} = require('./config');
 
 const dashboardRouter = require('./routes/dashboard-router');
 const dohickyRouter = require('./routes/dohicky-router');
@@ -100,7 +89,7 @@ app.get('/list/whatchamagiggers', (req, res) => {
 });
 
 app.use('*', (req, res) => {
-    return res.status(404).json({ message : 'Path not found' });
+    res.redirect(`https://${req.hostname}:${port}`);
 });
 
 mongoose.set('useFindAndModify', false);
@@ -108,19 +97,19 @@ mongoose.set('useFindAndModify', false);
 mongoose.connect(dbURL, { useNewUrlParser : true })
     .then(() => {
         console.log('---- Connecting to database ----');
+
         https.listen(port, () => {
-            console.log(`Server listening on port ${port}`);
+            console.log(`HTTPS server listening on port ${port}`);
         });
     })
     .catch(err => console.error(`---- Error connecting to database : ${err} ----`));
 
-// io.on('connection', function(socket) {
-//     console.log('Client has connected to socket ', socket.id);
-//     // console.log('sockets opened ', io.sockets.sockets);
+httpApp.use(cors(corsOptions));
 
-//     activateDohicky(socket);
+httpApp.get('*', (req, res) => {
+    res.redirect(`https://${req.hostname}:${port}`);
+})
 
-//     socket.on('disconnect', function() {
-//         console.log('Client has disconnected ', socket.id);
-//     })
-// });
+http.listen('3001', () => {
+    console.log('---- HTTP server listening on port 3001 ----');
+});
