@@ -87,12 +87,12 @@ function triggerWhatCreation(doh) {
                                     // clickAction : `https://${OUTSIDE_ADDRESS}:${port}/list/whatchamagiggers`
                                 }
                             },
-                            webpush : {
-                                notification : {
-                                    title : 'New whatchamagigger!',
-                                    body : wat.thingamabob_msg
-                                }
-                            },
+                            // webpush : {
+                                // notification : {
+                                //     title : 'New whatchamagigger!',
+                                //     body : wat.thingamabob_msg
+                                // }
+                            // },
                             token : user.token
                         };
 
