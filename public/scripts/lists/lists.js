@@ -1,4 +1,4 @@
-import { gReqOpts, resources, uReqOpts } from '../../api-res.js';
+import { gReqOpts, resources, uReqOpts, pReqOpts } from '../../api-res.js';
 import {viewTitles} from '../constants/lists.js';
 import renderers from '../helpers/renderers.js';
 // import listeners from '../helpers/events.js';
@@ -76,6 +76,30 @@ function fetchResources(str) {
         });
 }
 
+function createThingamabob() {
+    console.log('createThingamabob ', state);
+    let reqObj = pReqOpts;
+    reqObj.body = JSON.stringify({ awesome_field : state.input });
+    const postReq = new Request(endpnt, pReqOpts);
+
+    fetch(postReq)
+        .then(response => {
+            if (!response.ok) throw new Error(response.statusText);
+            return response;
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.info('Successful response ', data);
+            state.tMsg = `Successfull creation of thingamabob`;
+            state.input = null;
+            closeFormModal();
+        })
+        .catch(err => {
+            console.error(`Error posting thingamabob: ${err}`);
+            state.tMsg = `Error, cannot create thingamabob`;
+        });
+}
+
 function activateDohicky() {
     console.log('ACTIVATE_DOHICKY');
     const uDoh = state.dohicky;
@@ -97,7 +121,6 @@ function activateDohicky() {
             console.error(`Error updating dohicky ${uDoh._id}: ${err}`);
             state.dMsg = `Error updating dohicky ${uDoh._id}`;
         });
-    // socket.emit('ACTIVATE_DOHICKY', uDoh);
 }
 
 
@@ -160,6 +183,11 @@ function clearModal() {
 
 function clearPlayBtn(pBtn) {
     pBtn.parentNode.removeChild(pBtn);
+}
+
+function closeFormModal() {
+    document.querySelector('#f-modal').classList.add('hidden');
+    document.querySelector('input').value = null;
 }
 
 function renderPlayBtn(resource) {
@@ -252,6 +280,28 @@ function setUpH3() {
     }
 }
 
+function setUpSubmit() {
+    const form = document.querySelector('#t-form');
+    if (browserLoc.includes('thingamabobs')) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('submission hit');
+            if (state.input) {
+                createThingamabob();
+            }
+        });
+    }
+}
+
+function setUpFInput() {
+    const input = document.querySelector('input');
+    input.addEventListener('input', (e) => {
+        state.input = e.target.value;
+        console.log('state ', state);
+    });
+}
+
 function setUpAddBtn() {
     const addBtn = document.querySelector('.t-add'),
         fModal = document.getElementById('f-modal');
@@ -276,6 +326,8 @@ function setUpList() {
     // Thingamabob-specific set up
     setUpH3();
     setUpAddBtn();
+    setUpFInput();
+    setUpSubmit();
 
     setUpInitFetch();
 

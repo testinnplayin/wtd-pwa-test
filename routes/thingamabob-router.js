@@ -63,6 +63,7 @@ router.get('/:id', (req, res) => {
 
 // POST a thingamabob at /api/thingamabobs
 router.post('/', jsonParser, (req, res) => {
+    console.log('POST request for thingamabobs');
     const reqFields = ['awesome_field'],
         str = 'thingamabob';
     
@@ -73,7 +74,7 @@ router.post('/', jsonParser, (req, res) => {
         .then(newT => {
             const anotherStr = 'dohicky';
 
-            if (!newT || !newT.hasOwnProperty(_id)) {
+            if (!newT) {
                 throw new Error(`problem with ${str} creation`);
             }
 
