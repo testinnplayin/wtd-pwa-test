@@ -24,8 +24,28 @@ let state = {};
 
 // indexedDB request object
 
-let request;
+let request = indexedDB.open('Test');
+let db;
 
+
+request.onerror = e => {
+    console.error(`Error with db request: ${e.target.errorCode}`);
+};
+
+request.onsuccess = e => {
+    console.log('Successful request with db');
+    db = e.target.result;
+    if (db) {
+        console.log('db exists!');
+    }
+};
+
+request.onupgradeneeded = e => {
+    console.log('onupgradeneeded');
+    let lDB = e.target.result;
+    let objectStore = lDB.createObjectStore('thingamabobs', { autoIncrement : true });
+
+};
 
 
 // API calls
@@ -80,28 +100,48 @@ function fetchResources(str) {
         });
 }
 
+function putInDB(newT) {
+    console.log('putInDB triggered');
+    let req = db.transaction(['thingamabobs'], 'readwrite')
+        .objectStore('thingamabobs')
+        .add(newT);
+    req.onerror = e => {
+        console.error(`Error while writing thingamabob to db: ${e.target.errorCode}`);
+    };
+    req.onsuccess = e => {
+        console.log('Success writing thingamabob to db');
+    };
+    req.oncomplete = e => {
+        console.log('Writing to db complete');
+    };
+}
+
 function createThingamabob() {
     console.log('createThingamabob ', state);
     let reqObj = pReqOpts;
     reqObj.body = JSON.stringify({ awesome_field : state.input });
     const postReq = new Request(endpnt, pReqOpts);
 
-    fetch(postReq)
-        .then(response => {
-            if (!response.ok) throw new Error(response.statusText);
-            return response;
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.info('Successful response ', data);
-            state.tMsg = `Successfull creation of thingamabob`;
-            state.input = null;
-            closeFormModal();
-        })
-        .catch(err => {
-            console.error(`Error posting thingamabob: ${err}`);
-            state.tMsg = `Error, cannot create thingamabob`;
-        });
+    if (!navigator.onLine) {
+        putInDB({ awesome_field : state.input });
+    } else {
+        fetch(postReq)
+            .then(response => {
+                if (!response.ok) throw new Error(response.statusText);
+                return response;
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.info('Successful response ', data);
+                state.tMsg = `Successfull creation of thingamabob`;
+                state.input = null;
+                closeFormModal();
+            })
+            .catch(err => {
+                console.error(`Error posting thingamabob: ${err}`);
+                state.tMsg = `Error, cannot create thingamabob`;
+            });
+    }
 }
 
 function activateDohicky() {

@@ -169,9 +169,11 @@ function fetchTableData(tableId) {
 
 // Database functions
 
-db.onerror = e => {
-    console.error('Problem with database ', e.target.errorCode);
-};
+function handleError() {
+    db.onerror = e => {
+        console.error('Problem with database ', e.target.errorCode);
+    };
+}
 
 function handleSuccess () {
     request.onsuccess = e => {
@@ -182,9 +184,14 @@ function handleSuccess () {
 function setUpDB() {
     console.log('setUpDB triggered');
     request.onupgradeneeded = function(e) {
+        console.log('request upgrade needed triggered');
         let db = e.target.result;
-        console.log('db ', db);
-        const objectStore = db.createObjectStore('Test', { autoIncrement : true });
+        const objectStore = db.createObjectStore('thingamabobs', { autoIncrement : true });
+        // objectStore.createIndex('awesome_field', 'awesome_field', { unique : false });
+        // objectStore.transaction.oncomplete = e => {
+        //     const tObjectStore = db.transaction('thingamabobs', 'readwrite').objectStore('thingamabobs');
+        //     console.log('success!');
+        // };
     };
 }
 
