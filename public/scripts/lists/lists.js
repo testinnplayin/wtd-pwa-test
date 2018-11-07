@@ -103,49 +103,63 @@ function fetchResources(str) {
 function putInDB(newT) {
     console.log('putInDB triggered');
     let req = db.transaction(['thingamabobs'], 'readwrite')
-        .objectStore('thingamabobs')
-        .add(newT);
+                .objectStore('thingamabobs')
+                .add(newT);
     req.onerror = e => {
         console.error(`Error while writing thingamabob to db: ${e.target.errorCode}`);
     };
     req.onsuccess = e => {
         console.log('Success writing thingamabob to db');
+        closeFormModal();
+        state.input = null;
+        state.tMsg = `Thingamabobs send is pending`;
     };
     req.oncomplete = e => {
         console.log('Writing to db complete');
     };
 }
 
-function createThingamabob() {
-    console.log('createThingamabob ', state);
-    let reqObj = pReqOpts;
-    reqObj.body = JSON.stringify({ awesome_field : state.input });
-    const postReq = new Request(endpnt, pReqOpts);
+function removeFromDB(source) {
+    let req = db.transaction(['thingamabobs'], 'readwrite')
+                .objectStore('thingamabobs')
+                .delete(source);
 
-    if (!navigator.onLine) {
-        putInDB({ awesome_field : state.input });
-    } else {
-        fetch(postReq)
-            .then(response => {
-                if (!response.ok) throw new Error(response.statusText);
-                return response;
-            })
-            .then(res => res.json())
-            .then(data => {
-                console.info('Successful response ', data);
-                state.tMsg = `Successfull creation of thingamabob`;
-                state.input = null;
-                closeFormModal();
-            })
-            .catch(err => {
-                console.error(`Error posting thingamabob: ${err}`);
-                state.tMsg = `Error, cannot create thingamabob`;
-            });
+    req.onsuccess = e => {
+        console.log('Success removing thingamabob from db');
+    };
+
+    req.onerror = e => {
+        console.error(`Error removing thingamabob from db: ${e.target.errorCode}`);
+    };
+}
+
+// NOTE: source only appears when the user created a thingamabob offline and it exists in the db
+function createThingamabob(obj, source) {
+    let reqObj = pReqOpts;
+    reqObj.body = JSON.stringify(obj);
+    const postReq = new Request(endpnt, pReqOpts);
+    fetch(postReq)
+        .then(response => {
+            if (!response.ok) throw new Error(response.statusText);
+            return response;
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.info('Successful response ', data);
+            state.tMsg = `Successfull creation of thingamabob`;
+            state.input = null;
+            closeFormModal();
+        })
+        .catch(err => {
+            console.error(`Error posting thingamabob: ${err}`);
+            state.tMsg = `Error, cannot create thingamabob`;
+        });
+    if (source) {
+        removeFromDB(source);
     }
 }
 
 function activateDohicky() {
-    console.log('ACTIVATE_DOHICKY');
     const uDoh = state.dohicky;
     let uEndpnt = `${resources.bAddress}/api/${resources.elements.dEle}/${uDoh._id}`,
         updateObj = uReqOpts;
@@ -174,7 +188,6 @@ function activateDohicky() {
 function addPBtnListener(pBtn) {
     pBtn.addEventListener('click', e => {
         // NOTE: state.dohicky should be the same dohicky that was called to populate the modal
-        console.log('play button click!', e.currentTarget, state);
         const eId = e.currentTarget.getAttribute('id');
         if (eId === state.dohicky._id) {
             if (!state.dohicky.is_active) state.dohicky.is_active = !state.dohicky.is_active;
@@ -330,9 +343,13 @@ function setUpSubmit() {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log('submission hit');
             if (state.input) {
-                createThingamabob();
+                let obj = { awesome_field : state.input };
+                if (!navigator.onLine) {
+                    putInDB(obj);
+                } else {
+                    createThingamabob(obj);
+                }
             }
         });
     }
@@ -342,7 +359,6 @@ function setUpFInput() {
     const input = document.querySelector('input');
     input.addEventListener('input', (e) => {
         state.input = e.target.value;
-        console.log('state ', state);
     });
 }
 
@@ -384,3 +400,18 @@ setUpList();
 if (!window.indexedDB) {
     console.warn('Browser does not support indexedDB');
 }
+
+window.addEventListener('online', () => {
+    let req = db.transaction('thingamabobs').objectStore('thingamabobs');
+    req.openCursor().onsuccess = e => {
+        const cursor = e.target.result;
+
+        if (cursor) {
+            createThingamabob(cursor.value, cursor.key);
+            cursor.continue();
+        }
+    };
+    req.openCursor.onerror = e => {
+        console.error(`Error fetching thingamabobs from db: ${e.target.errorCode}`);
+    };
+});
