@@ -16,6 +16,10 @@ const https_options = {
 const https = require('https').Server(https_options, app);
 const http = require('http').createServer(httpApp);
 
+// NOTE: the following is for testing with ngrok (be sure to get rid of the http-related code below)
+// const http = require('http').createServer(app);
+
+
 const cors = require('cors');
 const arrOrigins = [
     // 'http://localhost:5000',
@@ -99,12 +103,18 @@ mongoose.connect(dbURL, { useNewUrlParser : true })
     .then(() => {
         console.log('---- Connecting to database ----');
 
+        // NOTE, this following code snippet is for testing with ngrok... needs to be in http
+        // http.listen(port, () => {
+        //     console.log(`HTTP server listening on port ${port}`);
+        // });
+
         https.listen(port, () => {
             console.log(`HTTPS server listening on port ${port}`);
         });
     })
     .catch(err => console.error(`---- Error connecting to database : ${err} ----`));
 
+// NOTE: deactivate the following http code when testing with ngrok
 httpApp.use(cors(corsOptions));
 
 httpApp.get('*', (req, res) => {
