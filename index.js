@@ -89,7 +89,8 @@ app.get('/list/whatchamagiggers', (req, res) => {
 });
 
 app.use('*', (req, res) => {
-    res.redirect(`https://${req.hostname}:${port}`);
+    res.send(404).json({ message : 'Page not found' });
+    // res.redirect(`https://${req.hostname}:${port}`);
 });
 
 mongoose.set('useFindAndModify', false);

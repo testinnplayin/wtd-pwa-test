@@ -407,7 +407,7 @@ if ('serviceWorker' in navigator) {
             
             if (registrations.length === 0) {
                 navigator.serviceWorker
-                    .register('./firebase-messaging.js')
+                    .register('./firebase-messaging-sw.js')
                     .then(function(registration) {
                         console.log('[Service Worker] registered ', registration);
                         // messaging.useServiceWorker(registration);
