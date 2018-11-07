@@ -125,7 +125,6 @@ function deleteUser(userId) {
 }
 
 function subscribeUser() {
-    console.log('subscribeUser');
     navigator.serviceWorker.ready
         .then(registration => {
             if (!registration.pushManager) {
@@ -141,7 +140,6 @@ function subscribeUser() {
                         .then(subscription => {
                             alert('Subscribed successfully');
                             console.info('Push notification subscribed');
-                            console.log('subscription ', subscription);
                             let userIdArr = subscription.endpoint.split('/');
                             const userId = userIdArr[userIdArr.length - 1];
                             
@@ -161,7 +159,6 @@ function subscribeUser() {
 }
 
 function unsubscribeUser() {
-    console.log('unsubscribeUser');
     navigator.serviceWorker.ready
         .then(registration => {
             registration.pushManager.getSubscription()
@@ -172,7 +169,6 @@ function unsubscribeUser() {
                         .then(() => {
                             alert('Successfully unsubscribed');
                             console.info('Successfully unsubscribed from push notifications');
-                            console.log('subscription post drop ', subscription);
                             const userId = localStorage.getItem('userId');
                             localStorage.removeItem('userId');
                             deleteUser(userId);
