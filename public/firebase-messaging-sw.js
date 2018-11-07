@@ -124,7 +124,7 @@ self.addEventListener('fetch', function(e) {
   
 });
 
-// someone's wonderful workaround to fix FCM bug
+// someone's wonderful workaround to fix FCM bug, extends Event object and holds data in it
 class CustomPushEvent extends Event {
   constructor(data) {
     super('push')
@@ -143,7 +143,7 @@ self.addEventListener('push', (e) => {
   // Skip if event is our own custom event
   if (e.custom) return;
 
-  // Kep old event data to override
+  // Keep old event data to override
   let oldData = e.data
 
   // Create a new event to dispatch
@@ -169,7 +169,14 @@ self.addEventListener('push', (e) => {
 
 messaging.setBackgroundMessageHandler(function(payload) {
   console.log('FIREBASE SERVICE WORKER payload ', payload);
-  return self.registration.showNotification(payload.data.title, { body : payload.data.tMsg });
+// This following code is to shut up the FCM message and capture the event with our custom push event
+// The payload contains a property called _notification when it comes from our event (even though it's undefined)
+// We do not want a second notification to appear so we break out of that branch with a simple return
+  if (payload.hasOwnProperty('_notification')) {
+    return self.registration.showNotification(payload.data.title, { body : payload.data.tMsg, icon : 'https://192.168.1.46:3000/images/action_192x192.png' });
+  } else {
+    return;
+  }
 });
 
 self.addEventListener('notificationclick', function(e) {
@@ -183,12 +190,13 @@ self.addEventListener('notificationclick', function(e) {
       const cLng = clientList.length;
       for (let i = 0; i < cLng; i++) {
         const client = clientList[i];
+        // needs some improving since this only works while on the '/' route
         if (client.url === '/' && 'focus' in client) {
           return client.focus();
         }
       }
       if (clients.openWindow) {
-        return clients.openWindow('/');
+        return clients.openWindow('/list/whatchamagiggers');
       }
     }))
 });
