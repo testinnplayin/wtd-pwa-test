@@ -173,7 +173,7 @@ messaging.setBackgroundMessageHandler(function(payload) {
 // The payload contains a property called _notification when it comes from our event (even though it's undefined)
 // We do not want a second notification to appear so we break out of that branch with a simple return
   if (payload.hasOwnProperty('_notification')) {
-    return self.registration.showNotification(payload.data.title, { body : payload.data.tMsg, icon : 'https://192.168.1.46:3000/images/action_192x192.png' });
+    return self.registration.showNotification(payload.data.title, { body : payload.data.tMsg, badge : 'https://192.168.1.46:3000/images/action_128x128.png', icon : 'https://192.168.1.46:3000/images/action_192x192.png' });
   } else {
     return;
   }
