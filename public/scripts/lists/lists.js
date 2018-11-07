@@ -22,6 +22,10 @@ if (browserLoc.includes('thingamabobs')) {
 
 let state = {};
 
+// indexedDB request object
+
+let request;
+
 
 
 // API calls
@@ -336,3 +340,7 @@ function setUpList() {
 }
 
 setUpList();
+
+if (!window.indexedDB) {
+    console.warn('Browser does not support indexedDB');
+}

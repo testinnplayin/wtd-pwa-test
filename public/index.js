@@ -35,6 +35,12 @@ const dClick = document.querySelector('.d-widget'),
 
 let state = {};
 
+// database request object
+
+let request = indexedDB.open('Test');
+
+let db;
+
 
 
 // API FUNCTIONS
@@ -158,6 +164,28 @@ function fetchTableData(tableId) {
                 state.tDataMsg = `Error retrieving table data for ${tableId}`;
             });
     }
+}
+
+
+// Database functions
+
+db.onerror = e => {
+    console.error('Problem with database ', e.target.errorCode);
+};
+
+function handleSuccess () {
+    request.onsuccess = e => {
+        db = e.target.result;
+    }
+}
+
+function setUpDB() {
+    console.log('setUpDB triggered');
+    request.onupgradeneeded = function(e) {
+        let db = e.target.result;
+        console.log('db ', db);
+        const objectStore = db.createObjectStore('Test', { autoIncrement : true });
+    };
 }
 
 
@@ -426,7 +454,9 @@ if ('serviceWorker' in navigator) {
     setUpStateNoSW();
 }
 
-window.addEventListener('beforeinstallprompt', e => {
-    console.log('install prompt triggered ', e);
-});
+if (!window.indexedDB) {
+    console.warn('This browser does not support indexedDB');
+} else {
+    setUpDB();
+}
 
