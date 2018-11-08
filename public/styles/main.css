@@ -12,6 +12,24 @@ body {
     height: 100%;
 }
 
+nav {
+    background-color: #444;
+    display: block;
+    list-style: none;
+}
+
+nav li {
+    padding: 15px 0;
+    text-align: center;
+}
+
+nav li a {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
 main {
     text-align: center;
     height: 100%;
