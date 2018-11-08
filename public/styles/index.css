@@ -18,6 +18,10 @@
     font-weight: bold;
 }
 
+th {
+    text-align: left;
+}
+
 .m-body-table {
     width: 100%;
 }
